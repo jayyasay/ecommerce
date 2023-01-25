@@ -9,6 +9,7 @@ app.use(bodyParser.json())
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/products', { useNewUrlParser: true});
+mongoose.set('strictQuery', false);
 
 const ProductSchema = new mongoose.Schema({
     id: {
@@ -21,7 +22,7 @@ const ProductSchema = new mongoose.Schema({
     }
 })
 
-const Product = mongoose.model('Product', ProductSchema);
+const Product = new mongoose.model('Product', ProductSchema);
 
 const product = new Product({id: 4, name: 'Jayster'});
 product.save()
@@ -40,24 +41,11 @@ Product.find()
         console.log(error.message);
     });
 
-app.post('/products', (req, res) => {
-    const product = req.body;
-    product.save()
-        .then(() => {
-            res.status(201).send({ message: 'Product created successfully' });
-        })
-        .catch(error => {
-            res.status(400).send({ message: error.message });
-        });
-    res.status(201).send({message: 'Product created successfully'});
-});
-
-app.get('/products', (req, res) => {
-    res.send([{id: 1, name: 'product 1'}, {id: 2, name: 'product 2'}, {id: 3, name: 'product 3'}]);
-})
-
-app.get('/', (req, res) => {
-    res.send('Hello from the back-end server!!!');
+app.get('/api/products', (req, res) => {
+    Product.find()
+    .then(products => {
+        res.json(products)
+    })
 })
 
 app.listen(3001, () => {
