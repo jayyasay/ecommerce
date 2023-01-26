@@ -1,37 +1,48 @@
+import axios from "axios";
 import { useState } from "react";
-import Product from '../../models/Product'
-function AddProduct() {
-    const [id, setId] = useState('');
-    const [name, setName] = useState('');
+
+function Form() {
+    const [formData, setFormData] = useState({
+        name: '',
+        age: ''
+    });
+
+    const handleChange = (event) => {
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+            [event.target.age]: event.target.value
+        })
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const product = new Product({id, name});
-        product.save()
-        .then(() => {
-            console.log('Product Saved!');
-            setId('');
-            setName('');
+        axios.post('http://localhost:3001/api/nameages', formData)
+        .then(res => {
+            setFormData(res.data);
         })
-        .catch(error => {
-            console.log(error.message);
+        .catch(err => {
+            console.log(err);
         })
+        setFormData({
+            name: '',
+            age: ''
+        });
     }
+
     return (
-        <>
             <form onSubmit={handleSubmit}>
                 <label>
-                    ID:
-                    <input type="text" value={id} onChange={event => setId(event.target.value)} />
+                    Name:
+                    <input type="text" name="name" onChange={handleChange} value={formData.name} />
                 </label>
                 <label>
-                    Name:
-                    <input type="text" value={name} onChange={event => setName(event.target.value)} />
+                    Age:
+                    <input type="number" name="age" onChange={handleChange} value={formData.age} />
                 </label><br />
-                <button type="submit">Add Product</button>
+                <button type="submit">Add Details</button>
             </form>
-        </>
-    )
+  )
 }
 
-export default AddProduct
+export default Form

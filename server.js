@@ -1,51 +1,41 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.use(cors());
 app.use(bodyParser.json())
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/products', { useNewUrlParser: true});
-mongoose.set('strictQuery', false);
 
-const ProductSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        required: true
-    },
+mongoose.connect('mongodb://localhost:27017/nameages', { useNewUrlParser: true });
+
+const NameAgeSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true
+        type: String
+    },
+    age: {
+        type: Number
     }
 })
 
-const Product = new mongoose.model('Product', ProductSchema);
+const NameAge = new mongoose.model('NameAge', NameAgeSchema)
 
-const product = new Product({id: 4, name: 'Jayster'});
-product.save()
-.then(() => {
-    console.log('Product saved successfully!');
-})
-.catch(error => {
-    console.log(error.message);
-})
-
-Product.find()
-    .then(products => {
-        console.log(products);
+app.post('/api/nameages', (req, res) => {
+    const nameage = new NameAge(req.body)
+    nameage.save()
+    .then(result=> {
+        res.json({message: 'Product save successfully',
+    nameage: result})
     })
-    .catch(error => {
-        console.log(error.message);
-    });
+});
 
-app.get('/api/products', (req, res) => {
-    Product.find()
-    .then(products => {
-        res.json(products)
-    })
+app.get('/api/nameages', (req, res) => {
+    NameAge.find()
+        .then(details => {
+            res.json(details)
+        })
 })
 
 app.listen(3001, () => {
