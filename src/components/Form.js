@@ -8,6 +8,8 @@ import { Typography } from "antd";
 function TestForm() {
   const { Title } = Typography;
 
+  const [form] = Form.useForm();
+
   const formStyle = {
     input: {
       textAlign: "left",
@@ -22,24 +24,22 @@ function TestForm() {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
-      [event.target.age]: event.target.value,
     });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const onFinish = () => {
     axios
       .post("http://localhost:3001/api/nameages", formData)
       .then((res) => {
-        setFormData(res.data);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
-    setFormData({
-      name: "",
-      age: "",
-    });
+    form.resetFields();
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -52,6 +52,7 @@ function TestForm() {
           }}
         >
           <Form
+            form={form}
             labelCol={{
               span: 3,
             }}
@@ -64,7 +65,8 @@ function TestForm() {
             initialValues={{
               remember: true,
             }}
-            onSubmit={handleSubmit}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
           >
             <Form.Item
               label="Name"
@@ -78,6 +80,7 @@ function TestForm() {
               style={formStyle.input}
             >
               <Input
+                name="name"
                 placeholder="input placeholder"
                 onChange={handleChange}
                 value={formData.name}
@@ -95,14 +98,17 @@ function TestForm() {
               style={formStyle.input}
             >
               <Input
+                name="age"
                 placeholder="input placeholder"
                 onChange={handleChange}
                 value={formData.age}
               />
             </Form.Item>
-            <Button type="primary" htmlType="submit" size="medium">
-              Submit
-            </Button>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" size="medium">
+                Submit
+              </Button>
+            </Form.Item>
           </Form>
         </Card>
       </Col>
