@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Upload } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
 import { Card } from "antd";
 import { Col, Row } from "antd";
 import { Typography } from "antd";
@@ -122,6 +123,21 @@ function FormProducts() {
                 onChange={handleChange}
                 value={formData.itemName}
               />
+            </Form.Item>
+            <Form.Item label="Item image" name="itemImage">
+              <Form.Item label="Upload" valuePropName="fileList">
+                <Upload action="/upload.do" listType="picture-card">
+                  <div>
+                    <PlusOutlined />
+                    <div
+                      style={{
+                        marginTop: 8,
+                      }}
+                    >
+                    </div>
+                  </div>
+                </Upload>
+              </Form.Item>
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" size="medium">
