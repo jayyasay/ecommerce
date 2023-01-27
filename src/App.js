@@ -1,5 +1,6 @@
 import './App.css';
 import TestForm from './components/Form'
+import FormProducts from './components/FormProducts';
 function App() {
 
   // const [data, setData] = useState([])
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="App">
       <TestForm />
+      <FormProducts />
     </div>
   );
 }
