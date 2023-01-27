@@ -5,7 +5,7 @@ import { Card } from "antd";
 import { Col, Row } from "antd";
 import { Typography } from "antd";
 
-function TestForm() {
+function FormProducts() {
   const { Title } = Typography;
 
   const [form] = Form.useForm();
@@ -16,8 +16,9 @@ function TestForm() {
     },
   };
   const [formData, setFormData] = useState({
-    name: "",
-    age: "",
+    itemName: "",
+    itemDesc: "",
+    itemQuantity: "",
   });
 
   const handleChange = (event) => {
@@ -29,7 +30,7 @@ function TestForm() {
 
   const onFinish = () => {
     axios
-      .post("http://localhost:3001/api/db/nameage", formData)
+      .post("http://localhost:3001/api/db/products", formData)
       .then((res) => {
         console.log(res);
       })
@@ -45,7 +46,7 @@ function TestForm() {
   return (
     <Row justify="center">
       <Col>
-        <Title>Input your details</Title>
+        <Title>Input your products</Title>
         <Card
           style={{
             width: 500,
@@ -54,7 +55,7 @@ function TestForm() {
           <Form
             form={form}
             labelCol={{
-              span: 3,
+              span: 24,
             }}
             wrapperCol={{
               span: 24,
@@ -69,39 +70,57 @@ function TestForm() {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Name"
-              name="name"
+              label="Item name"
+              name="itemName"
               rules={[
                 {
                   required: true,
-                  message: "Please input your name!",
+                  message: "Please input your product's name!",
                 },
               ]}
               style={formStyle.input}
             >
               <Input
-                name="name"
+                name="itemName"
                 placeholder="input placeholder"
                 onChange={handleChange}
-                value={formData.name}
+                value={formData.itemName}
               />
             </Form.Item>
             <Form.Item
-              label="Age"
-              name="age"
+              label="Item description"
+              name="itemDesc"
               rules={[
                 {
                   required: true,
-                  message: "Please input your age!",
+                  message: "Please input your product's name!",
                 },
               ]}
               style={formStyle.input}
             >
               <Input
-                name="age"
+                name="itemDesc"
                 placeholder="input placeholder"
                 onChange={handleChange}
-                value={formData.age}
+                value={formData.itemDescription}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Item quantity"
+              name="itemQuantity"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your product's name!",
+                },
+              ]}
+              style={formStyle.input}
+            >
+              <Input
+                name="itemQuantity"
+                placeholder="input placeholder"
+                onChange={handleChange}
+                value={formData.itemName}
               />
             </Form.Item>
             <Form.Item>
@@ -116,4 +135,4 @@ function TestForm() {
   );
 }
 
-export default TestForm;
+export default FormProducts;
