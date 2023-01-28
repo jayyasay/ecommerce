@@ -1,12 +1,20 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button, Form, Input, Upload } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 import { Col, Row } from "antd";
 import { Typography } from "antd";
 
 function FormProducts() {
+  const normFile = (e) => {
+    console.log("Upload event:", e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
   const { Title } = Typography;
 
   const [form] = Form.useForm();
@@ -69,6 +77,7 @@ function FormProducts() {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            encType="multipart/form-data"
           >
             <Form.Item
               label="Item name"
@@ -103,7 +112,7 @@ function FormProducts() {
                 name="itemDesc"
                 placeholder="input placeholder"
                 onChange={handleChange}
-                value={formData.itemDescription}
+                value={formData.itemDesc}
               />
             </Form.Item>
             <Form.Item
@@ -124,21 +133,37 @@ function FormProducts() {
                 value={formData.itemName}
               />
             </Form.Item>
-            <Form.Item label="Item image" name="itemImage">
+            <Form.Item
+              name="testImage"
+              label="Upload"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+            >
+              <Upload
+                name="testImage"
+                action="http://localhost:3001/api/db/products"
+                listType="picture"
+              >
+                <Button icon={<UploadOutlined />}>Click to upload</Button>
+              </Upload>
+            </Form.Item>
+            {/* <Form.Item label="Item image" name="itemImage">
               <Form.Item label="Upload" valuePropName="fileList">
-                <Upload action="/upload.do" listType="picture-card">
+                <Upload
+                  action="http://localhost:3001/api/db/products"
+                  listType="picture-card"
+                >
                   <div>
                     <PlusOutlined />
                     <div
                       style={{
                         marginTop: 8,
                       }}
-                    >
-                    </div>
+                    ></div>
                   </div>
                 </Upload>
               </Form.Item>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item>
               <Button type="primary" htmlType="submit" size="medium">
                 Submit

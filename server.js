@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const fs = require("fs");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,7 +23,9 @@ const NameAgeSchema = new mongoose.Schema({
 });
 
 const Storage = multer.diskStorage({
-  destination: "uploads",
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
@@ -51,10 +54,11 @@ app.post("/api/db/products", (req, res) => {
         itemDesc: req.body.itemDesc,
         itemQuantity: req.body.itemQuantity,
         itemImage: {
-          data: req.body.filename,
-          contentType: "image/png",
+          data: fs.readFileSync(req.file.path),
+          contentType: req.file.mimetype,
         },
       });
+      console.log(req.file.path);
       products.save().then(() => res.send("successfully uploaded!"));
     }
   });
