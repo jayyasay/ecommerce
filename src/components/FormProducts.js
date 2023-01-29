@@ -28,6 +28,7 @@ function FormProducts() {
     itemName: "",
     itemDesc: "",
     itemQuantity: "",
+    itemImage: "",
   });
 
   const handleChange = (event) => {
@@ -41,7 +42,7 @@ function FormProducts() {
     axios
       .post("http://localhost:3001/api/db/products", formData)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -139,11 +140,7 @@ function FormProducts() {
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >
-              <Upload
-                name="testImage"
-                action="http://localhost:3001/api/db/products"
-                listType="picture"
-              >
+              <Upload name="testImage" listType="picture">
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
