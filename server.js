@@ -24,10 +24,11 @@ const NameAgeSchema = new mongoose.Schema({
 
 const Storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads/");
+    cb(null, "./uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
   },
 });
 
@@ -44,14 +45,14 @@ app.post("/api/db/nameage", (req, res) => {
   });
 });
 
-app.post("/api/db/products", upload.single("testImage"), (req, res) => {
+app.post("/api/db/products", upload.single("testImage"), (req, res, next) => {
   const products = new ImageModel({
     itemName: req.body.itemName,
     itemDesc: req.body.itemDesc,
     itemQuantity: req.body.itemQuantity,
     itemImage: {
-      data: req.file ? fs.readFileSync(req.file.path) : "",
-      contentType: req.file ? req.file.mimetype : "",
+      data: fs.readFileSync(req.file.path),
+      contentType: req.file.mimetype,
     },
   });
   products.save().then(() => res.send("Successfully uploaded!"));

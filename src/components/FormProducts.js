@@ -28,7 +28,7 @@ function FormProducts() {
     itemName: "",
     itemDesc: "",
     itemQuantity: "",
-    itemImage: "",
+    itemImage: null,
   });
 
   const handleChange = (event) => {
@@ -38,16 +38,34 @@ function FormProducts() {
     });
   };
 
-  const onFinish = () => {
-    axios
-      .post("http://localhost:3001/api/db/products", formData)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    form.resetFields();
+  const handleUpload = ({ fileList }) => {
+    console.log("fileList", fileList);
+    const [file] = fileList;
+    setFormData({ ...formData, itemImage: file });
+  };
+
+  const onFinish = async () => {
+    const data = new FormData();
+    data.append("itemImage", formData.itemImage);
+    data.append("itemName", formData.itemName);
+    data.append("itemDesc", formData.itemDesc);
+    data.append("itemQuantity", formData.itemQuantity);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/api/db/products",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res.data);
+      form.resetFields();
+    } catch (err) {
+      console.log(err.data);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -79,6 +97,7 @@ function FormProducts() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             encType="multipart/form-data"
+            method="POST"
           >
             <Form.Item
               label="Item name"
@@ -131,16 +150,17 @@ function FormProducts() {
                 name="itemQuantity"
                 placeholder="input placeholder"
                 onChange={handleChange}
-                value={formData.itemName}
               />
             </Form.Item>
-            <Form.Item
-              name="testImage"
-              label="Upload"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
-            >
-              <Upload name="testImage" listType="picture">
+            <Form.Item label="Upload" getValueFromEvent={normFile}
+                valuePropName="fileList">
+              <Upload
+                name="testImage"
+                listType="picture"
+                beforeUpload={() => false}
+                onChange={handleUpload}
+                accept="image/png"
+              >
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
