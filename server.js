@@ -27,8 +27,8 @@ const Storage = multer.diskStorage({
     cb(null, "./uploads");
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
+    const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, uniquePrefix + '-' + file.originalname)
   },
 });
 
@@ -45,7 +45,7 @@ app.post("/api/db/nameage", (req, res) => {
   });
 });
 
-app.post("/api/db/products", upload.single("testImage"), (req, res, next) => {
+app.post("/api/db/products", upload.single("itemImage"), (req, res, next) => {
   const products = new ImageModel({
     itemName: req.body.itemName,
     itemDesc: req.body.itemDesc,
