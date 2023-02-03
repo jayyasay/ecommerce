@@ -29,7 +29,11 @@ function TestForm() {
 
   const onFinish = () => {
     axios
-      .post("http://localhost:3001/api/db/nameage", formData)
+      .post("http://localhost:3001/api/db/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         console.log(res);
       })

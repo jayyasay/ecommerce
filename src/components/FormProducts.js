@@ -1,14 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
-import { Button, Form, Input } from "antd";
+import { useForm } from "react-hook-form";
+import { Form, Button, Input, Upload, Typography } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 import { Col, Row } from "antd";
-import { Typography } from "antd";
 
 function FormProducts() {
+  const [ formReset ] = Form.useForm();
+
   const { Title } = Typography;
 
-  const [form] = Form.useForm();
+  const { reset, register, handleSubmit } = useForm();
 
   const formStyle = {
     input: {
@@ -19,6 +22,7 @@ function FormProducts() {
     itemName: "",
     itemDesc: "",
     itemQuantity: "",
+    itemImage: null,
   });
 
   const handleChange = (event) => {
@@ -28,19 +32,27 @@ function FormProducts() {
     });
   };
 
-  const onFinish = () => {
+  const handleUpload = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.files[0] });
+  };
+
+  const onSubmit = async () => {
+    const data = new FormData();
+    data.append("itemName", formData.itemName);
+    data.append("itemDesc", formData.itemDesc);
+    data.append("itemQuantity", formData.itemQuantity);
+    data.append("itemImage", formData.itemImage);
+
     axios
-      .post("http://localhost:3001/api/db/products", formData)
+      .post("http://localhost:3001/api/db/products", data)
       .then((res) => {
+        reset({...formData})
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
-    form.resetFields();
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    formReset.resetFields();
   };
 
   return (
@@ -53,82 +65,85 @@ function FormProducts() {
           }}
         >
           <Form
-            form={form}
+          form={formReset}
+            name="basic"
             labelCol={{
-              span: 24,
+              span: 8,
             }}
             wrapperCol={{
-              span: 24,
+              span: 16,
             }}
             style={{
-              maxWidth: "100%",
+              maxWidth: 600,
             }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            onFinish={handleSubmit(onSubmit)}
+            autoComplete="off"
           >
             <Form.Item
-              label="Item name"
               name="itemName"
+              label="Item name"
               rules={[
                 {
                   required: true,
-                  message: "Please input your product's name!",
+                  message: "Please input your username!",
                 },
               ]}
-              style={formStyle.input}
+              onChange={handleChange}
             >
-              <Input
-                name="itemName"
-                placeholder="input placeholder"
-                onChange={handleChange}
-                value={formData.itemName}
-              />
+              <Input name="itemName" />
             </Form.Item>
             <Form.Item
-              label="Item description"
               name="itemDesc"
+              label="Item description"
               rules={[
                 {
                   required: true,
-                  message: "Please input your product's name!",
+                  message: "Please input your username!",
                 },
               ]}
-              style={formStyle.input}
+              onChange={handleChange}
             >
-              <Input
-                name="itemDesc"
-                placeholder="input placeholder"
-                onChange={handleChange}
-                value={formData.itemDescription}
+              <Input name="itemDesc" />
+            </Form.Item>
+            <Form.Item
+              name="itemQuantity"
+              label="Item Quantity"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input name="itemQuantity" />
+            </Form.Item>
+            <Form.Item label="Upload">
+              <input
+                type="file"
+                {...register("itemImage")}
+                onChange={handleUpload}
+                required
               />
             </Form.Item>
             <Form.Item
-              label="Item quantity"
-              name="itemQuantity"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your product's name!",
-                },
-              ]}
-              style={formStyle.input}
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
             >
-              <Input
-                name="itemQuantity"
-                placeholder="input placeholder"
-                onChange={handleChange}
-                value={formData.itemName}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" size="medium">
+              <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>
           </Form>
+          {/* <form encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
+            <input type="text" name="itemName" onChange={handleChange}/>
+            <input type="text" name="itemDesc" onChange={handleChange}/>
+            <input type="number" name="itemQuantity" onChange={handleChange}/>
+            <input type="file"  onChange={handleUpload}/>
+            <input type="submit" value="Submit" />
+          </form> */}
         </Card>
       </Col>
     </Row>
