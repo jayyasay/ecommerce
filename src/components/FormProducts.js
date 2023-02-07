@@ -81,7 +81,6 @@ function FormProducts() {
   const productList = async () => {
     axios.get("http://localhost:3001/api/db/products").then((res) => {
       setFetchProducts(res.data);
-      console.log(res.data);
     });
   };
 
@@ -124,9 +123,9 @@ function FormProducts() {
               background: colorBgContainer,
               overflow: "auto",
               height: "100vh",
-              position: "fixed",
+              position: "sticky",
               left: 0,
-              top: 64,
+              top: 0,
               bottom: 0,
             }}
           >
@@ -134,11 +133,6 @@ function FormProducts() {
               <Row justify="center">
                 <Col>
                   <Title>Input your products</Title>
-                  <Card
-                    style={{
-                      width: 500,
-                    }}
-                  >
                     <Form
                       form={formReset}
                       name="basic"
@@ -212,7 +206,6 @@ function FormProducts() {
                         </Button>
                       </Form.Item>
                     </Form>
-                  </Card>
                 </Col>
               </Row>
             </Col>
@@ -220,10 +213,10 @@ function FormProducts() {
           <Layout
             className="site-layout"
             style={{
-              marginLeft: 520,
+              marginLeft: 0,
             }}
           >
-            <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+            <Content style={{ margin: "0 16px 0", overflow: "initial" }}>
               {fetchProducts &&
                 fetchProducts.map((product, index) => (
                   <Card key={index}>
@@ -248,15 +241,14 @@ function FormProducts() {
                         product.itemImage.data.data
                       ).toString("base64")}`}
                       style={{
-                        width: "100%",
-                        height: "auto",
+                        maxWidth: "300px",
                       }}
                     />
                   </Card>
                 ))}
               <Modal
                 title="Confirm delete"
-                visible={showModal}
+                open={showModal}
                 onCancel={handleCancel}
                 onOk={handleOk}
               >

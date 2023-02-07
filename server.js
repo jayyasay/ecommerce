@@ -140,6 +140,29 @@ app.delete("/api/db/products/:id", (req, res) => {
   });
 });
 
+app.put("/api/db/products/:id", upload.single("itemImage"), (req, res) => {
+  const { id } = req.params;
+  const updatedProduct = req.body;
+  const image = req.file;
+
+  if (!image) {
+    return res.status(400).send({ error: "Image is required" });
+  }
+
+  updatedProduct.image = {
+    data: fs.readFileSync(image.path),
+    contentType: image.mimetype
+  };
+
+  ImageModel.findOneAndUpdate({ _id: id }, updatedProduct, { new: true }, (error, product) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    res.status(200).send(product);
+  });
+});
+
+
 app.get("/api/db/registrations/:id", (req, res) => {
     const { id } = req.params;
     RegistrationModel.findOne({ _id: id }, { username: 1 }).then((user) => {
