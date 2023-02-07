@@ -130,6 +130,16 @@ app.get("/api/db/registrations", (req, res) => {
 
 //////////////////////////////////////////////////
 
+app.delete("/api/db/products/:id", (req, res) => {
+  const { id } = req.params;
+  ImageModel.deleteOne({ _id: id }, (error) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    res.status(200).send("Product successfully deleted");
+  });
+});
+
 app.get("/api/db/registrations/:id", (req, res) => {
     const { id } = req.params;
     RegistrationModel.findOne({ _id: id }, { username: 1 }).then((user) => {
