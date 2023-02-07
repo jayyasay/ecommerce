@@ -5,7 +5,7 @@ import { Card } from "antd";
 import { Col, Row } from "antd";
 import { Typography } from "antd";
 
-function LoginForm() {
+function Login() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const { Title } = Typography;
@@ -18,7 +18,7 @@ function LoginForm() {
     },
   };
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -47,12 +47,15 @@ function LoginForm() {
           localStorage.setItem("token", res.data.token);
           messageApi.open({
             type: "success",
-            content: "Login successfully",
+            content: "Login successfully. Please wait...",
           });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         } else {
           messageApi.open({
             type: "error",
-            content: "Incorrect username or password",
+            content: "Incorrect email or password",
           });
         }
       })
@@ -111,7 +114,7 @@ function LoginForm() {
                   name="email"
                   placeholder="Enter your email"
                   onChange={handleChange}
-                  value={formData.name}
+                  value={formData.email}
                 />
               </Form.Item>
               <Form.Item
@@ -144,4 +147,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default Login;
