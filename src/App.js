@@ -6,6 +6,7 @@ import jwt_decode from "jwt-decode";
 import Navigation from "./components/Navigation";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ItemList from "./pages/ItemList";
+import Register from "./components/Register";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,11 +30,9 @@ function App() {
     <BrowserRouter>
       <Navigation username={username} />
       <Routes>
-        <Route
-          path="/"
-          element={!isLoggedIn ? <Login /> : <FormProducts />}
-        />
+        <Route path="/" element={!isLoggedIn ? <Login /> : <FormProducts />} />
         <Route path="/item-list" element={<ItemList />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );

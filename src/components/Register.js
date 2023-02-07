@@ -4,8 +4,9 @@ import { Button, Form, Input, message } from "antd";
 import { Card } from "antd";
 import { Col, Row } from "antd";
 import { Typography } from "antd";
+import { Link } from "react-router-dom";
 
-function TestForm() {
+function Register() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const { Title } = Typography;
@@ -135,6 +136,9 @@ function TestForm() {
                 <Button type="primary" htmlType="submit" size="medium">
                   Submit
                 </Button>
+                <Button type="link">
+                  <Link to="/">Login</Link>
+                </Button>
               </Form.Item>
             </Form>
           </Card>
@@ -144,4 +148,4 @@ function TestForm() {
   );
 }
 
-export default TestForm;
+export default Register;
