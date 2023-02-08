@@ -31,7 +31,7 @@ function App() {
       <Navigation username={username} />
       <Routes>
         <Route path="/" element={!isLoggedIn ? <Login /> : <FormProducts />} />
-        <Route path="/item-list" element={<ItemList />} />
+        <Route path="/item-list" element={!isLoggedIn ? <Login /> : <ItemList />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
