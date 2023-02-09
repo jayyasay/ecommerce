@@ -40,7 +40,7 @@ function List() {
     itemName: "",
     itemDesc: "",
     itemQuantity: "",
-    itemImage: null,
+    // itemImage: null,
   });
 
   const [fetchProducts, setFetchProducts] = useState([]);
@@ -51,7 +51,7 @@ function List() {
     itemNameEdit: "",
     itemDescEdit: "",
     itemQuantityEdit: "",
-    itemImage: null,
+    // itemImage: null,
   });
 
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -60,6 +60,13 @@ function List() {
     indexOfFirstProduct,
     indexOfLastProduct
   );
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const handleUpload = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.files[0] });
@@ -83,47 +90,30 @@ function List() {
       });
   }, [productToDelete]);
 
-  const handleEdit = useCallback(async (productToEdit) => {
-    await currentData(productToEdit);
+  const handleEdit = useCallback(async (productId) => {
+    setFormData({});
+    console.log(productId);
+    await axios
+      .get(`http://localhost:3001/api/db/products/${productId}`)
+      .then((res) => {
+        setFormData({
+          itemName: res.data.itemName,
+          itemDesc: res.data.itemDesc,
+          itemQuantity: res.data.itemQuantity,
+          // itemImage: res.data.itemImage,
+        });
+      });
+    setProductToEdit(productId);
     setShowModalEdit(true);
   }, []);
 
   const handleCancelEdit = () => {
-    setProductToEdit({
-      ...productToEdit,
-      itemNameEdit: "hehe",
-      itemDescEdit: "hehe",
-      itemQuantityEdit: "hehe",
-      itemImageEdit: null,
-    });
-    console.log(productToEdit);
+    formReset.resetFields();
+    console.log(formData);
     setShowModalEdit(false);
   };
 
-  const handleOkEdit = async (id) => {
-    console.log(id);
-    axios
-      .delete(`http://localhost:3001/api/db/products/${productToDelete}`)
-      .then((res) => {
-        setShowModal(false);
-        productList();
-      });
-  };
-
-  const currentData = async (id) => {
-    await axios
-      .get(`http://localhost:3001/api/db/products/${id}`)
-      .then((res) => {
-        setProductToEdit({
-          itemNameEdit: res.data.itemName,
-          itemDescEdit: res.data.itemDesc,
-          itemQuantityEdit: res.data.itemQuantity,
-          itemImageEdit: res.data.itemImage,
-        });
-      });
-  };
-
-  const productList = async () => {
+  const productList = () => {
     axios.get("http://localhost:3001/api/db/products").then((res) => {
       setFetchProducts(res.data);
     });
@@ -138,22 +128,25 @@ function List() {
     data.append("itemName", formData.itemName);
     data.append("itemDesc", formData.itemDesc);
     data.append("itemQuantity", formData.itemQuantity);
-    data.append("itemImage", formData.itemImage);
+    // data.append("itemImage", formData.itemImage);
 
-    axios
-      .post("http://localhost:3001/api/db/products", data)
+    await axios
+      .put(`http://localhost:3001/api/db/products/${productToEdit}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
-        messageApi.open({
-          type: "success",
-          content: "Data Submitted",
-        });
-        reset({ ...formData });
+        productList();
+      })
+      .then((res) => {
+        setShowModal(false);
         productList();
       })
       .catch((err) => {
         console.log(err);
       });
-    formReset.resetFields();
+    setShowModalEdit(false);
   };
 
   return (
@@ -210,7 +203,7 @@ function List() {
           title="Edit item"
           open={showModalEdit}
           onCancel={handleCancelEdit}
-          onOk={handleOkEdit}
+          footer={null}
         >
           <Form
             form={formReset}
@@ -227,8 +220,26 @@ function List() {
             onFinish={handleSubmit(onSubmit)}
             autoComplete="off"
           >
+            {/* <input
+              type="input"
+              {...register("itemName")}
+              onChange={handleChange}
+              value={formData.itemName}
+            />
+            <input
+              type="input"
+              {...register("itemDesc")}
+              onChange={handleChange}
+              value={formData.itemDesc}
+            />
+            <input
+              type="input"
+              {...register("itemQuantity")}
+              onChange={handleChange}
+              value={formData.itemQuantity}
+            /> */}
             <Form.Item
-              name="itemNameEdit"
+              name="itemName"
               label="Item name"
               rules={[
                 {
@@ -236,12 +247,13 @@ function List() {
                   message: "Please input your username!",
                 },
               ]}
-              initialValue={productToEdit.itemNameEdit}
+              onChange={handleChange}
+              initialValue={formData.itemName}
             >
-              <Input name="itemNameEdit" style={formStyle} />
+              <Input name="itemName" style={formStyle}/>
             </Form.Item>
             <Form.Item
-              name="itemDescEdit"
+              name="itemDesc"
               label="Item description"
               rules={[
                 {
@@ -249,12 +261,13 @@ function List() {
                   message: "Please input your username!",
                 },
               ]}
-              initialValue={productToEdit.itemDescEdit}
+              onChange={handleChange}
+              initialValue={formData.itemDesc}
             >
-              <Input name="itemDescEdit" style={formStyle} />
+              <Input name="itemDesc" style={formStyle} />
             </Form.Item>
             <Form.Item
-              name="itemQuantityEdit"
+              name="itemQuantity"
               label="Item Quantity"
               rules={[
                 {
@@ -262,24 +275,32 @@ function List() {
                   message: "Please input your username!",
                 },
               ]}
-              initialValue={productToEdit.itemQuantityEdit}
+              onChange={handleChange}
+              initialValue={formData.itemQuantity}
             >
-              <Input name="itemQuantityEdit" style={formStyle} />
+              <Input name="itemQuantity" style={formStyle} />
             </Form.Item>
-            <Form.Item label="Upload image">
+            {/* <Form.Item label="Upload image">
               <input
                 type="file"
                 {...register("itemImage")}
                 onChange={handleUpload}
                 required
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
-              wrapperCol={{
-                offset: 8,
-                span: 16,
+              labelCol={{
+                span: 4,
               }}
-            ></Form.Item>
+              wrapperCol={{
+                span: 24,
+              }}
+              className="center"
+            >
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </Form.Item>
           </Form>
         </Modal>
       </Content>

@@ -152,41 +152,62 @@ app.delete("/api/db/products/:id", (req, res) => {
   );
 });
 
-app.put(
-  "/api/db/products/:id",
-  upload.single("itemImage"),
-  async (req, res) => {
-    const { id } = req.params;
-    const updatedProduct = req.body;
-    const image = req.file;
+// app.put(
+//   "/api/db/products/:id",
+//   upload.single("itemImage"),
+//   async (req, res) => {
+//     const { id } = req.params;
+//     const updatedProduct = req.body;
+//     const image = req.file;
 
-    if (!image) {
-      return res.status(400).send({
-        error: "Image is required",
-      });
+//     if (!image) {
+//       return res.status(400).send({
+//         error: "Image is required",
+//       });
+//     }
+
+//     try {
+//       const data = await fs.promises.readFile(image.path);
+//       updatedProduct.itemImage = {
+//         data,
+//         contentType: image.mimetype,
+//       };
+//       const product = await ImageModel.findOneAndUpdate(
+//         {
+//           _id: id,
+//         },
+//         updatedProduct,
+//         {
+//           new: true,
+//         }
+//       );
+//       res.status(200).send(product);
+//     } catch (err) {
+//       res.status(500).send(err);
+//     }
+//   }
+// );
+
+app.put("/api/db/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const { itemName, itemDesc, itemQuantity } = req.body;
+
+  try {
+    const product = await ImageModel.findById(id);
+    if (!product) {
+      return res.status(404).send({ error: "Product not found" });
     }
 
-    try {
-      const data = await fs.promises.readFile(image.path);
-      updatedProduct.itemImage = {
-        data,
-        contentType: image.mimetype,
-      };
-      const product = await ImageModel.findOneAndUpdate(
-        {
-          _id: id,
-        },
-        updatedProduct,
-        {
-          new: true,
-        }
-      );
-      res.status(200).send(product);
-    } catch (err) {
-      res.status(500).send(err);
-    }
+    product.itemName = itemName;
+    product.itemDesc = itemDesc;
+    product.itemQuantity = itemQuantity;
+
+    const updatedProduct = await product.save();
+    res.status(200).send(updatedProduct);
+  } catch (err) {
+    res.status(500).send(err);
   }
-);
+});
 
 app.get("/api/db/registrations/:id", (req, res) => {
   const { id } = req.params;
