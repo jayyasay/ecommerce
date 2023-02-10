@@ -1,6 +1,7 @@
 import { Layout, Menu } from "antd";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const { Header } = Layout;
 
@@ -48,31 +49,40 @@ const Navigation = ({ username }) => {
           <div
             style={{
               float: "right",
-              width: 120,
-              height: 31,
               color: "#fff",
               cursor: "pointer",
+              marginLeft: "20px"
             }}
             onClick={handleLogout}
           >
-            Logout
+            {user.username ? "Logout" : ""}
           </div>
-          <img
+          <div
             style={{
-              float: "left",
-              marginRight: "20px",
+              float: "right",
+              color: "#fff",
             }}
-            src="/logo.png"
-            alt="logo"
-          />
+          >
+            {user.username ? `Welcome! ${user.username}` : ""}
+          </div>
+          <Link to="/">
+            <img
+              style={{
+                float: "left",
+                marginRight: "20px",
+              }}
+              src="/logo.png"
+              alt="logo"
+            />
+          </Link>
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={["2"]}
             items={[
               {
-                label: `Welcome! ${user.username}`,
-                key: "1",
+                label: <Link to="/item-list">Item List</Link>,
+                key: "2",
               },
             ]}
           />

@@ -4,6 +4,7 @@ import { Button, Form, Input, message } from "antd";
 import { Card } from "antd";
 import { Col, Row } from "antd";
 import { Typography } from "antd";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -137,6 +138,9 @@ function Login() {
               <Form.Item>
                 <Button type="primary" htmlType="submit" size="medium">
                   Submit
+                </Button>
+                <Button type="link">
+                  <Link to="/register">Register</Link>
                 </Button>
               </Form.Item>
             </Form>

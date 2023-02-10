@@ -122,7 +122,14 @@ app.get("/api/db/login", (req, res) => {
 
 app.get("/api/db/registrations", (req, res) => {
   const { id } = req.params;
-  RegistrationModel.find({ _id: id }, { username: 1 }).then((user) => {
+  RegistrationModel.find(
+    {
+      _id: id,
+    },
+    {
+      username: 1,
+    }
+  ).then((user) => {
     if (!user) return res.status(404).send("User not found!");
     res.json(user);
   });
@@ -132,21 +139,98 @@ app.get("/api/db/registrations", (req, res) => {
 
 app.delete("/api/db/products/:id", (req, res) => {
   const { id } = req.params;
-  ImageModel.deleteOne({ _id: id }, (error) => {
-    if (error) {
-      return res.status(500).send(error);
+  ImageModel.deleteOne(
+    {
+      _id: id,
+    },
+    (error) => {
+      if (error) {
+        return res.status(500).send(error);
+      }
+      res.status(200).send("Product successfully deleted");
     }
-    res.status(200).send("Product successfully deleted");
-  });
+  );
+});
+
+// app.put(
+//   "/api/db/products/:id",
+//   upload.single("itemImage"),
+//   async (req, res) => {
+//     const { id } = req.params;
+//     const updatedProduct = req.body;
+//     const image = req.file;
+
+//     if (!image) {
+//       return res.status(400).send({
+//         error: "Image is required",
+//       });
+//     }
+
+//     try {
+//       const data = await fs.promises.readFile(image.path);
+//       updatedProduct.itemImage = {
+//         data,
+//         contentType: image.mimetype,
+//       };
+//       const product = await ImageModel.findOneAndUpdate(
+//         {
+//           _id: id,
+//         },
+//         updatedProduct,
+//         {
+//           new: true,
+//         }
+//       );
+//       res.status(200).send(product);
+//     } catch (err) {
+//       res.status(500).send(err);
+//     }
+//   }
+// );
+
+app.put("/api/db/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const { itemName, itemDesc, itemQuantity } = req.body;
+
+  try {
+    const product = await ImageModel.findById(id);
+    if (!product) {
+      return res.status(404).send({ error: "Product not found" });
+    }
+
+    product.itemName = itemName;
+    product.itemDesc = itemDesc;
+    product.itemQuantity = itemQuantity;
+
+    const updatedProduct = await product.save();
+    res.status(200).send(updatedProduct);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 app.get("/api/db/registrations/:id", (req, res) => {
-    const { id } = req.params;
-    RegistrationModel.findOne({ _id: id }, { username: 1 }).then((user) => {
-      if (!user) return res.status(404).send("User not found!");
-      res.json(user);
-    });
+  const { id } = req.params;
+  RegistrationModel.findOne(
+    {
+      _id: id,
+    },
+    {
+      username: 1,
+    }
+  ).then((user) => {
+    if (!user) return res.status(404).send("User not found!");
+    res.json(user);
   });
+});
+
+app.get("/api/db/products/:id", (req, res) => {
+  const { id } = req.params;
+  ImageModel.findOne({ _id: id }, (err, product) => {
+    if (err) return res.status(404).send("Product not found!");
+    res.json(product);
+  });
+});
 
 app.get("/api/db/products", (req, res) => {
   ImageModel.find().then((details) => {
