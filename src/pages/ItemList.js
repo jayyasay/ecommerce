@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Layout, theme } from "antd";
 import FormUpdate from "../components/FormUpdate";
 import List from "../components/List";
@@ -8,6 +9,12 @@ function ItemList() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const [refresh, setRefresh] = useState(false);
+
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   return (
     <>
@@ -26,7 +33,7 @@ function ItemList() {
               bottom: 0,
             }}
           >
-            <FormUpdate />
+            <FormUpdate handleRefresh={handleRefresh}/>
           </Sider>
           <Layout
             className="site-layout"
@@ -35,7 +42,7 @@ function ItemList() {
               marginLeft: 0,
             }}
           >
-            <List />
+            <List refresh={refresh}/>
           </Layout>
         </Layout>
       </Layout>

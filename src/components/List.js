@@ -5,7 +5,6 @@ import {
   Form,
   Button,
   Input,
-  message,
   Layout,
   Space,
   Card,
@@ -14,7 +13,7 @@ import {
 } from "antd";
 import { Buffer } from "buffer";
 
-function List() {
+function List({ refresh }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(5);
 
@@ -22,11 +21,9 @@ function List() {
 
   const { Content } = Layout;
 
-  const [messageApi] = message.useMessage();
-
   const [formReset] = Form.useForm();
 
-  const { reset, register, handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
 
   const formStyle = useMemo(
     () => ({
@@ -91,7 +88,6 @@ function List() {
   }, [productToDelete]);
 
   const handleEdit = useCallback(async (productId) => {
-    setFormData({});
     console.log(productId);
     await axios
       .get(`http://localhost:3001/api/db/products/${productId}`)
@@ -108,8 +104,6 @@ function List() {
   }, []);
 
   const handleCancelEdit = () => {
-    formReset.resetFields();
-    console.log(formData);
     setShowModalEdit(false);
   };
 
@@ -121,7 +115,15 @@ function List() {
 
   useEffect(() => {
     productList();
-  }, []);
+  }, [refresh]);
+
+  useEffect(() => {
+    formReset.setFieldsValue({
+      itemName: formData.itemName,
+      itemDesc: formData.itemDesc,
+      itemQuantity: formData.itemQuantity,
+    });
+  }, [formReset, formData.itemName, formData.itemDesc, formData.itemQuantity]);
 
   const onSubmit = async () => {
     const data = new FormData();
@@ -137,9 +139,6 @@ function List() {
         },
       })
       .then((res) => {
-        productList();
-      })
-      .then((res) => {
         setShowModal(false);
         productList();
       })
@@ -151,46 +150,56 @@ function List() {
 
   return (
     <>
-      <Pagination
-        defaultCurrent={1}
-        current={currentPage}
-        total={fetchProducts.length}
-        pageSize={productsPerPage}
-        onChange={paginate}
-        style={{ marginTop: "1em", textAlign: "center" }}
-      />
+      {currentProducts.length !== 0 && (
+        <Pagination
+          defaultCurrent={1}
+          current={currentPage}
+          total={fetchProducts.length}
+          pageSize={productsPerPage}
+          onChange={paginate}
+          style={{ marginTop: "1em", textAlign: "center" }}
+        />
+      )}
       <Content style={{ margin: "0 16px 0", overflow: "initial" }}>
-        {currentProducts.map((product) => (
-          <Card key={product._id}>
-            <Space direction="vertical">
-              <Space wrap>
-                <Button type="primary" onClick={() => handleEdit(product._id)}>
-                  Edit
-                </Button>
-                <Button
-                  type="primary"
-                  danger
-                  onClick={() => handleDelete(product._id)}
-                >
-                  Delete
-                </Button>
+        {currentProducts.length === 0 ? (
+          <h1>No Products Available</h1>
+        ) : (
+          currentProducts.map((product) => (
+            <Card key={product._id}>
+              <Space direction="vertical">
+                <Space wrap>
+                  <Button
+                    type="primary"
+                    onClick={() => handleEdit(product._id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    type="primary"
+                    danger
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    Delete
+                  </Button>
+                </Space>
               </Space>
-            </Space>
-            <p>{product.itemName}</p>
-            <p>{product.itemDesc}</p>
-            <p>{product.itemQuantity}</p>
-            <img
-              alt=""
-              src={`data:image/jpg;base64,${Buffer.from(
-                product.itemImage.data.data
-              ).toString("base64")}`}
-              style={{
-                maxWidth: "300px",
-              }}
-            />
-          </Card>
-        ))}
+              <p>{product.itemName}</p>
+              <p>{product.itemDesc}</p>
+              <p>{product.itemQuantity}</p>
+              <img
+                alt=""
+                src={`data:image/jpg;base64,${Buffer.from(
+                  product.itemImage.data.data
+                ).toString("base64")}`}
+                style={{
+                  maxWidth: "300px",
+                }}
+              />
+            </Card>
+          ))
+        )}
         <Modal
+          forceRender
           title="Confirm delete"
           open={showModal}
           onCancel={handleCancel}
@@ -200,6 +209,7 @@ function List() {
         </Modal>
 
         <Modal
+          forceRender
           title="Edit item"
           open={showModalEdit}
           onCancel={handleCancelEdit}
@@ -250,7 +260,7 @@ function List() {
               onChange={handleChange}
               initialValue={formData.itemName}
             >
-              <Input name="itemName" style={formStyle}/>
+              <Input name="itemName" style={formStyle} />
             </Form.Item>
             <Form.Item
               name="itemDesc"

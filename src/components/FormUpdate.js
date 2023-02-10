@@ -1,18 +1,9 @@
 import axios from "axios";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  Button,
-  Input,
-  Typography,
-  message,
-  Col,
-  Row,
-} from "antd";
+import { Form, Button, Input, Typography, message, Col, Row } from "antd";
 
-function FormUpdate() {
-
+function FormUpdate({handleRefresh }) {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [formReset] = Form.useForm();
@@ -33,14 +24,6 @@ function FormUpdate() {
     itemName: "",
     itemDesc: "",
     itemQuantity: "",
-    itemImage: null,
-  });
-
-  const [productToDelete, setProductToDelete] = useState(null);
-  const [productToEdit, setProductToEdit] = useState({
-    itemNameEdit: "",
-    itemDescEdit: "",
-    itemQuantityEdit: "",
     itemImage: null,
   });
 
@@ -70,6 +53,7 @@ function FormUpdate() {
           content: "Data Submitted",
         });
         reset({ ...formData });
+        handleRefresh();
       })
       .catch((err) => {
         console.log(err);
