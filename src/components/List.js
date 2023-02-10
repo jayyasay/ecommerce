@@ -10,12 +10,14 @@ import {
   Card,
   Modal,
   Pagination,
+  Row,
+  Col,
 } from "antd";
 import { Buffer } from "buffer";
 
 function List({ refresh }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(5);
+  const [productsPerPage] = useState(8);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -160,45 +162,47 @@ function List({ refresh }) {
           style={{ marginTop: "1em", textAlign: "center" }}
         />
       )}
-      <Content style={{ margin: "0 16px 0", overflow: "initial" }}>
-        {currentProducts.length === 0 ? (
-          <h1>No Products Available</h1>
-        ) : (
-          currentProducts.map((product) => (
-            <Card key={product._id}>
-              <Space direction="vertical">
-                <Space wrap>
-                  <Button
-                    type="primary"
-                    onClick={() => handleEdit(product._id)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </Button>
+      <Content style={{ margin: "0 16px 0", overflow: "hidden" }}>
+        {currentProducts.length === 0 ? <h1>No Products Available</h1> : null}
+        <Row gutter={[16, 16]}>
+          {currentProducts.map((product) => (
+            <Col span={6} key={product._id}>
+              <Card>
+                <Space direction="vertical">
+                  <Space wrap className="button-modal">
+                    <Button
+                      type="primary"
+                      onClick={() => handleEdit(product._id)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      type="primary"
+                      danger
+                      onClick={() => handleDelete(product._id)}
+                    >
+                      Delete
+                    </Button>
+                  </Space>
                 </Space>
-              </Space>
-              <p>{product.itemName}</p>
-              <p>{product.itemDesc}</p>
-              <p>{product.itemQuantity}</p>
-              <img
-                alt=""
-                src={`data:image/jpg;base64,${Buffer.from(
-                  product.itemImage.data.data
-                ).toString("base64")}`}
-                style={{
-                  maxWidth: "300px",
-                }}
-              />
-            </Card>
-          ))
-        )}
-        <Modal
+                <p>{product.itemName}</p>
+                <p>{product.itemDesc}</p>
+                <p>{product.itemQuantity}</p>
+                <img
+                  alt=""
+                  src={`data:image/jpg;base64,${Buffer.from(
+                    product.itemImage.data.data
+                  ).toString("base64")}`}
+                  style={{
+                    maxWidth: "100%",
+                  }}
+                />
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Content>
+      <Modal
           forceRender
           title="Confirm delete"
           open={showModal}
@@ -313,7 +317,6 @@ function List({ refresh }) {
             </Form.Item>
           </Form>
         </Modal>
-      </Content>
     </>
   );
 }
