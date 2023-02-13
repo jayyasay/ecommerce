@@ -2,8 +2,7 @@ import { Layout, Menu } from "antd";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-const { Header } = Layout;
+import { AutoComplete, Input } from "antd";
 
 const handleLogout = () => {
   localStorage.removeItem("token");
@@ -11,6 +10,19 @@ const handleLogout = () => {
 };
 
 const Navigation = ({ username }) => {
+  const { Header } = Layout;
+
+  const [options, setOptions] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("http://localhost:3001/api/db/products");
+      setOptions(result.data.map((item) => ({ value: item.itemName })));
+    };
+    fetchData();
+  }, []);
+
   const [user, setUser] = useState({});
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +47,14 @@ const Navigation = ({ username }) => {
     fetchData();
   }, [username]);
 
+  const handleSearch = (value) => {
+    setSearchText(value);
+    const filteredOptions = options.filter(
+      (option) => option.value.toLowerCase().indexOf(value.toLowerCase()) !== -1
+    );
+    setOptions(filteredOptions);
+  };
+
   return (
     <>
       <Layout>
@@ -51,7 +71,7 @@ const Navigation = ({ username }) => {
               float: "right",
               color: "#fff",
               cursor: "pointer",
-              marginLeft: "20px"
+              marginLeft: "20px",
             }}
             onClick={handleLogout}
           >
@@ -87,6 +107,29 @@ const Navigation = ({ username }) => {
             ]}
           />
         </Header>
+        <AutoComplete
+          dropdownMatchSelectWidth={252}
+          style={{
+            width: "300px",
+            position: "absolute",
+            zIndex: 999,
+            left: 0,
+            right: 0,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          options={options}
+          // onSelect={onSelect}
+          onSearch={handleSearch}
+        >
+          <Input.Search
+            size="large"
+            value={searchText}
+            onChange={(event) => setSearchText(event.target.value)}
+            placeholder="Search"
+            enterButton
+          />
+        </AutoComplete>
       </Layout>
     </>
   );
