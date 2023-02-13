@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ItemList from "./pages/ItemList";
 import Register from "./components/Register";
+import EditItem from "./pages/EditItem";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/" element={!isLoggedIn ? <Login /> : <FormProducts />} />
         <Route path="/item-list" element={!isLoggedIn ? <Login /> : <ItemList />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/edit/:id" element={<EditItem />} />
       </Routes>
     </BrowserRouter>
   );
