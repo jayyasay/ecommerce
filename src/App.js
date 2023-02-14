@@ -1,13 +1,13 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Login from "./components/Login";
-import FormProducts from "./components/FormProducts";
 import jwt_decode from "jwt-decode";
 import Navigation from "./components/Navigation";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ItemList from "./pages/ItemList";
 import Register from "./components/Register";
 import EditItem from "./pages/EditItem";
+import Catalogue from "./pages/Catalogue"
 import { ConfigProvider } from "antd";
 
 function App() {
@@ -49,6 +49,7 @@ function App() {
             path="/edit/:id"
             element={!isLoggedIn ? <Login /> : <EditItem />}
           />
+          <Route path="/catalogue" element={<Catalogue />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>

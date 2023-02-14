@@ -154,6 +154,10 @@ const Navigation = ({ username }) => {
                 label: <Link to="/item-list">Item List</Link>,
                 key: "2",
               },
+              {
+                label: <Link to="/catalogue">Catalogue</Link>,
+                key: "3"
+              }
             ]}
           />
         </Header>
