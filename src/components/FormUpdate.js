@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button, Input, Typography, message, Col, Row } from "antd";
 
-function FormUpdate({handleRefresh }) {
+function FormUpdate({ handleRefresh }) {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [formReset] = Form.useForm();
@@ -122,7 +122,15 @@ function FormUpdate({handleRefresh }) {
               >
                 <Input name="itemQuantity" style={formStyle} />
               </Form.Item>
-              <Form.Item label="Upload image">
+              <Form.Item
+                label="Upload image"
+                rules={[
+                  {
+                    required: true,
+                    message: "Missing image",
+                  },
+                ]}
+              >
                 <input
                   type="file"
                   {...register("itemImage")}

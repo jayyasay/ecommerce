@@ -1,7 +1,7 @@
 import { Layout, Menu } from "antd";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AutoComplete, Input } from "antd";
 
 const handleLogout = () => {
@@ -10,18 +10,20 @@ const handleLogout = () => {
 };
 
 const Navigation = ({ username }) => {
+  const navigate = useNavigate();
+
   const { Header } = Layout;
 
   const [options, setOptions] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("http://localhost:3001/api/db/products");
-      setOptions(result.data.map((item) => ({ value: item.itemName })));
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const result = await axios.get("http://localhost:3001/api/db/products");
+  //     setOptions(result.data.map((item) => ({ value: item.itemName })));
+  //   };
+  //   fetchData();
+  // }, []);
 
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -47,12 +49,36 @@ const Navigation = ({ username }) => {
     fetchData();
   }, [username]);
 
-  const handleSearch = (value) => {
+  const handleSearch = async (value) => {
     setSearchText(value);
-    const filteredOptions = options.filter(
-      (option) => option.value.toLowerCase().indexOf(value.toLowerCase()) !== -1
-    );
-    setOptions(filteredOptions);
+    if (value === "") {
+      setOptions([]);
+    } else {
+      const result = await axios.get(`http://localhost:3001/api/db/products`);
+      const filteredOptions = result.data.filter((item) =>
+        item.itemName.toLowerCase().includes(value.toLowerCase())
+      );
+      setTimeout(() => {
+        if (value === "") {
+          setOptions([]);
+        } else {
+          setOptions(
+            filteredOptions.map((item) => ({
+              id: item._id,
+              value: item.itemName,
+            }))
+          );
+        }
+      }, 500);
+    }
+  };
+
+  const onSelect = async (value, option) => {
+    await axios
+      .get(`http://localhost:3001/api/db/products/${option.id}`)
+      .then((res) => {
+        navigate(`/edit/${res.data._id}`);
+      });
   };
 
   return (
@@ -95,10 +121,34 @@ const Navigation = ({ username }) => {
               alt="logo"
             />
           </Link>
+          <AutoComplete
+            options={options}
+            onSelect={onSelect}
+            onSearch={handleSearch}
+            style={{
+              marginRight: "30px",
+              float: "right",
+              height: "64px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Input.Search
+              size="large"
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
+              placeholder="Quick search"
+              enterButton
+            />
+          </AutoComplete>
           <Menu
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={["2"]}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
             items={[
               {
                 label: <Link to="/item-list">Item List</Link>,
@@ -107,29 +157,6 @@ const Navigation = ({ username }) => {
             ]}
           />
         </Header>
-        <AutoComplete
-          dropdownMatchSelectWidth={252}
-          style={{
-            width: "300px",
-            position: "absolute",
-            zIndex: 999,
-            left: 0,
-            right: 0,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-          options={options}
-          // onSelect={onSelect}
-          onSearch={handleSearch}
-        >
-          <Input.Search
-            size="large"
-            value={searchText}
-            onChange={(event) => setSearchText(event.target.value)}
-            placeholder="Search"
-            enterButton
-          />
-        </AutoComplete>
       </Layout>
     </>
   );

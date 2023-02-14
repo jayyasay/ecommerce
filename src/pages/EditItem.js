@@ -2,11 +2,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Form, Input, Button, Spin } from "antd";
+import { Form, Input, Button, Spin, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function EditItem() {
   const { id } = useParams();
+
+  const { Title } = Typography;
 
   const { TextArea } = Input;
 
@@ -35,6 +37,9 @@ function EditItem() {
   });
 
   const [spin, setSpin] = useState(false);
+  const toggleSpin = (checked) => {
+    setSpin(checked);
+  };
 
   const handleChange = (event) => {
     setFormData({
@@ -81,6 +86,7 @@ function EditItem() {
   }, []);
 
   useEffect(() => {
+    setSpin(false)
     formReset.setFieldsValue({
       itemName: formData.itemName,
       itemDesc: formData.itemDesc,
@@ -90,67 +96,80 @@ function EditItem() {
 
   return (
     <>
-      <Form
-        form={formReset}
-        name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
-        style={{
-          maxWidth: 600,
-        }}
-        onFinish={handleSubmit(onSubmit)}
-        autoComplete="off"
-      >
-        <Form.Item
-          name="itemName"
-          label="Item name"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-          onChange={handleChange}
-          initialValue={formData.itemName}
-        >
-          <Input name="itemName" style={formStyle} />
-        </Form.Item>
-        <Form.Item
-          label="Item Description"
-          rules={[{ required: true, message: "Please input your username!" }]}
-          name="itemDesc"
-        >
-          <TextArea
-            showCount
-            maxLength={100}
+        <Spin spinning={spin} size="large">
+          <div
             style={{
-              height: 120,
-              resize: "none",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              marginTop: "50px",
             }}
-            placeholder="Item description"
-            name="itemDesc"
-            onChange={handleChange}
-          />
-        </Form.Item>
-        <Form.Item
-          name="itemQuantity"
-          label="Item Quantity"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-          onChange={handleChange}
-          initialValue={formData.itemQuantity}
-        >
-          <Input name="itemQuantity" style={formStyle} />
-        </Form.Item>
-        {/* <Form.Item label="Upload image">
+          >
+            <Title>Editing item {formData.itemName}</Title>
+            <Form
+              form={formReset}
+              name="basic"
+              labelCol={{
+                span: 8,
+              }}
+              wrapperCol={{
+                span: 24,
+              }}
+              onFinish={handleSubmit(onSubmit)}
+              autoComplete="off"
+              style={{
+                width: "800px",
+              }}
+            >
+              <Form.Item
+                name="itemName"
+                label="Item name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your username!",
+                  },
+                ]}
+                onChange={handleChange}
+                initialValue={formData.itemName}
+              >
+                <Input name="itemName" style={formStyle} />
+              </Form.Item>
+              <Form.Item
+                label="Item Description"
+                rules={[
+                  { required: true, message: "Please input your username!" },
+                ]}
+                name="itemDesc"
+              >
+                <TextArea
+                  showCount
+                  maxLength={100}
+                  style={{
+                    height: 120,
+                    resize: "none",
+                  }}
+                  placeholder="Item description"
+                  name="itemDesc"
+                  onChange={handleChange}
+                />
+              </Form.Item>
+              <Form.Item
+                name="itemQuantity"
+                label="Item Quantity"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your username!",
+                  },
+                ]}
+                onChange={handleChange}
+                initialValue={formData.itemQuantity}
+              >
+                <Input name="itemQuantity" style={formStyle} />
+              </Form.Item>
+              {/* <Form.Item label="Upload image">
               <input
                 type="file"
                 {...register("itemImage")}
@@ -158,21 +177,22 @@ function EditItem() {
                 required
               />
             </Form.Item> */}
-        <Form.Item
-          labelCol={{
-            span: 4,
-          }}
-          wrapperCol={{
-            span: 24,
-          }}
-          className="center"
-        >
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-        </Form.Item>
-        {spin && <Spin />}
-      </Form>
+              <Form.Item
+                labelCol={{
+                  span: 4,
+                }}
+                wrapperCol={{
+                  span: 24,
+                }}
+                className="center"
+              >
+                <Button type="primary" htmlType="submit">
+                  Save
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </Spin>
     </>
   );
 }

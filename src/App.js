@@ -8,6 +8,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ItemList from "./pages/ItemList";
 import Register from "./components/Register";
 import EditItem from "./pages/EditItem";
+import { ConfigProvider } from "antd";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,15 +29,29 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Navigation username={username} />
-      <Routes>
-        <Route path="/" element={!isLoggedIn ? <Login /> : <FormProducts />} />
-        <Route path="/item-list" element={!isLoggedIn ? <Login /> : <ItemList />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/edit/:id" element={<EditItem />} />
-      </Routes>
-    </BrowserRouter>
+    <ConfigProvider
+      theme={{
+        token: {
+          fontFamily: "Montserrat",
+        },
+      }}
+    >
+      <BrowserRouter>
+        <Navigation username={username} />
+        <Routes>
+          <Route path="/" element={!isLoggedIn ? <Login /> : <ItemList />} />
+          <Route
+            path="/item-list"
+            element={!isLoggedIn ? <Login /> : <ItemList />}
+          />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/edit/:id"
+            element={!isLoggedIn ? <Login /> : <EditItem />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </ConfigProvider>
   );
 }
 
