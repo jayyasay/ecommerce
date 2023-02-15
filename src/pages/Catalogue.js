@@ -31,7 +31,7 @@ function Catalogue() {
         </Title>
         {fetchProducts.map((product) => (
           <Col span={8} flex style={{ gap: 0 }}>
-            <Link to={`/edit/${product._id}`}>
+            <Link to={`/product/${product._id}`}>
             <Card
               extra={`${product.itemQuantity} ${product.itemQuantity === 1 ? 'item' : 'items'} left`}
               hoverable
