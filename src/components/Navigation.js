@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AutoComplete, Input } from "antd";
 
@@ -16,6 +16,15 @@ const Navigation = ({ username }) => {
 
   const [options, setOptions] = useState([]);
   const [searchText, setSearchText] = useState("");
+
+  const navStyle = useMemo(
+    () => ({
+      header: {
+        backgroundColor: "#C4A484"
+      },
+    }),
+    []
+  );
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -90,6 +99,7 @@ const Navigation = ({ username }) => {
             top: 0,
             zIndex: 1,
             width: "100%",
+            ...navStyle.header
           }}
         >
           <div
@@ -142,12 +152,12 @@ const Navigation = ({ username }) => {
             />
           </AutoComplete>
           <Menu
-            theme="dark"
             mode="horizontal"
             defaultSelectedKeys={["2"]}
             style={{
               display: "flex",
               alignItems: "center",
+              ...navStyle.header
             }}
             items={[
               {
@@ -156,8 +166,8 @@ const Navigation = ({ username }) => {
               },
               {
                 label: <Link to="/catalogue">Catalogue</Link>,
-                key: "3"
-              }
+                key: "3",
+              },
             ]}
           />
         </Header>

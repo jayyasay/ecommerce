@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Form, Input, Button, Spin, Typography } from "antd";
+import { Form, Input, Button, Spin, Typography, InputNumber } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function EditItem() {
@@ -24,8 +24,14 @@ function EditItem() {
         itemName: res.data.itemName,
         itemDesc: res.data.itemDesc,
         itemQuantity: res.data.itemQuantity,
+        itemPrice: res.data.itemPrice,
+        itemWidth: res.data.itemWidth,
+        itemHeight: res.data.itemHeight,
+        itemLength: res.data.itemLength,
+        itemMaterial: res.data.itemMaterial,
+        itemFinish: res.data.itemFinish,
+        itemProductionDays: res.data.itemProductionDays,
       });
-      console.log(res.data);
     });
   };
 
@@ -33,6 +39,13 @@ function EditItem() {
     itemName: "",
     itemDesc: "",
     itemQuantity: "",
+    itemPrice: "",
+    itemWidth: "",
+    itemHeight: "",
+    itemLength: "",
+    itemMaterial: "",
+    itemFinish: "",
+    itemProductionDays: "",
     // itemImage: null,
   });
 
@@ -53,6 +66,14 @@ function EditItem() {
     data.append("itemName", formData.itemName);
     data.append("itemDesc", formData.itemDesc);
     data.append("itemQuantity", formData.itemQuantity);
+    data.append("itemPrice", formData.itemPrice);
+    data.append("itemWidth", formData.itemWidth);
+    data.append("itemHeight", formData.itemHeight);
+    data.append("itemLength", formData.itemLength);
+    data.append("itemMaterial", formData.itemMaterial);
+    data.append("itemFinish", formData.itemFinish);
+    data.append("itemProductionDays", formData.itemProductionDays);
+    // data.append("itemImage", formData.itemImage);
     // data.append("itemImage", formData.itemImage);
 
     await axios
@@ -86,45 +107,123 @@ function EditItem() {
   }, []);
 
   useEffect(() => {
-    setSpin(false)
+    setSpin(false);
     formReset.setFieldsValue({
       itemName: formData.itemName,
       itemDesc: formData.itemDesc,
       itemQuantity: formData.itemQuantity,
+      itemPrice: formData.itemPrice,
+      itemWidth: formData.itemWidth,
+      itemHeight: formData.itemHeight,
+      itemLength: formData.itemLength,
+      itemMaterial: formData.itemMaterial,
+      itemFinish: formData.itemFinish,
+      itemProductionDays: formData.itemProductionDays,
     });
-  }, [formReset, formData.itemName, formData.itemDesc, formData.itemQuantity]);
+  }, [
+    formReset,
+    formData.itemName,
+    formData.itemDesc,
+    formData.itemQuantity,
+    formData.itemPrice,
+    formData.itemWidth,
+    formData.itemHeight,
+    formData.itemLength,
+    formData.itemMaterial,
+    formData.itemFinish,
+    formData.itemProductionDays,
+  ]);
 
   return (
     <>
-        <Spin spinning={spin} size="large">
-          <div
+      <Spin spinning={spin} size="large">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            marginTop: "50px",
+          }}
+        >
+          <Title>Editing item {formData.itemName}</Title>
+          <Form
+            form={formReset}
+            name="basic"
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 24,
+            }}
+            onFinish={handleSubmit(onSubmit)}
+            autoComplete="off"
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              marginTop: "50px",
+              width: "800px",
             }}
           >
-            <Title>Editing item {formData.itemName}</Title>
-            <Form
-              form={formReset}
-              name="basic"
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 24,
-              }}
-              onFinish={handleSubmit(onSubmit)}
-              autoComplete="off"
+            <Form.Item
+              name="itemName"
+              label="Item name"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input name="itemName" style={formStyle} />
+            </Form.Item>
+            <Form.Item
+              name="itemDesc"
+              label="Item description"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input.TextArea name="itemDesc" style={formStyle} />
+            </Form.Item>
+            <Form.Item
+              name="itemQuantity"
+              label="Item Quantity"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input name="itemQuantity" style={formStyle} />
+            </Form.Item>
+            <Form.Item
+              name="itemPrice"
+              label="Price"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input name="itemPrice" style={formStyle} />
+            </Form.Item>
+            <Form.Item
+              label="Dimensions"
               style={{
-                width: "800px",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <Form.Item
-                name="itemName"
-                label="Item name"
+                name="itemWidth"
+                label="W"
                 rules={[
                   {
                     required: true,
@@ -132,32 +231,12 @@ function EditItem() {
                   },
                 ]}
                 onChange={handleChange}
-                initialValue={formData.itemName}
               >
-                <Input name="itemName" style={formStyle} />
+                <Input name="itemWidth" style={formStyle} />
               </Form.Item>
               <Form.Item
-                label="Item Description"
-                rules={[
-                  { required: true, message: "Please input your username!" },
-                ]}
-                name="itemDesc"
-              >
-                <TextArea
-                  showCount
-                  maxLength={100}
-                  style={{
-                    height: 120,
-                    resize: "none",
-                  }}
-                  placeholder="Item description"
-                  name="itemDesc"
-                  onChange={handleChange}
-                />
-              </Form.Item>
-              <Form.Item
-                name="itemQuantity"
-                label="Item Quantity"
+                name="itemHeight"
+                label="H"
                 rules={[
                   {
                     required: true,
@@ -165,11 +244,63 @@ function EditItem() {
                   },
                 ]}
                 onChange={handleChange}
-                initialValue={formData.itemQuantity}
               >
-                <Input name="itemQuantity" style={formStyle} />
+                <Input name="itemHeight" style={formStyle} />
               </Form.Item>
-              {/* <Form.Item label="Upload image">
+              <Form.Item
+                name="itemLength"
+                label="L"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your username!",
+                  },
+                ]}
+                onChange={handleChange}
+              >
+                <Input name="itemLength" style={formStyle} />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              name="itemMaterial"
+              label="Material used"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input.TextArea name="itemMaterial" style={formStyle} />
+            </Form.Item>
+            <Form.Item
+              name="itemFinish"
+              label="Finish"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <Input.TextArea name="itemFinish" style={formStyle} />
+            </Form.Item>
+            <Form.Item
+              name="itemProductionDays"
+              label="Production Days"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+              onChange={handleChange}
+            >
+              <InputNumber name="itemProductionDays" style={formStyle} />
+            </Form.Item>
+            {/* <Form.Item label="Upload image">
               <input
                 type="file"
                 {...register("itemImage")}
@@ -177,22 +308,22 @@ function EditItem() {
                 required
               />
             </Form.Item> */}
-              <Form.Item
-                labelCol={{
-                  span: 4,
-                }}
-                wrapperCol={{
-                  span: 24,
-                }}
-                className="center"
-              >
-                <Button type="primary" htmlType="submit">
-                  Save
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Spin>
+            <Form.Item
+              labelCol={{
+                span: 4,
+              }}
+              wrapperCol={{
+                span: 24,
+              }}
+              className="center"
+            >
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Spin>
     </>
   );
 }

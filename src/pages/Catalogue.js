@@ -1,4 +1,5 @@
 import axios from "axios";
+import {Link} from "react-router-dom"
 import { useState, useEffect } from "react";
 import { Card, Row, Col, Typography } from "antd";
 import { Buffer } from "buffer";
@@ -30,8 +31,9 @@ function Catalogue() {
         </Title>
         {fetchProducts.map((product) => (
           <Col span={8} flex style={{ gap: 0 }}>
+            <Link to={`/edit/${product._id}`}>
             <Card
-              extra={`${product.itemQuantity} items left`}
+              extra={`${product.itemQuantity} ${product.itemQuantity === 1 ? 'item' : 'items'} left`}
               hoverable
               style={{
                 maxWidth: 400,
@@ -47,7 +49,9 @@ function Catalogue() {
               }
             >
               <Meta title={product.itemName} description={product.itemDesc} />
+              <p>{product.itemPrice}</p>
             </Card>
+            </Link>
           </Col>
         ))}
       </Row>

@@ -11,6 +11,7 @@ import Catalogue from "./pages/Catalogue"
 import { ConfigProvider } from "antd";
 
 function App() {
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
@@ -32,6 +33,9 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
+          borderRadius: 2,
+          colorPrimary: "#664229",
+          colorError: "#8B0000",
           fontFamily: "Montserrat",
         },
       }}

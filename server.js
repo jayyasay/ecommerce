@@ -104,6 +104,12 @@ app.post("/api/db/products", upload.single("itemImage"), (req, res, next) => {
     itemName: req.body.itemName,
     itemDesc: req.body.itemDesc,
     itemQuantity: req.body.itemQuantity,
+    itemWidth: req.body.itemWidth,
+    itemHeight: req.body.itemHeight,
+    itemLength: req.body.itemLength,
+    itemMaterial: req.body.itemMaterial,
+    itemFinish: req.body.itemFinish,
+    itemProductionDays: req.body.itemProductionDays,
     itemImage: {
       data: fs.readFileSync(req.file.path),
       contentType: req.file.mimetype,
@@ -190,7 +196,18 @@ app.delete("/api/db/products/:id", (req, res) => {
 
 app.put("/api/db/products/:id", async (req, res) => {
   const { id } = req.params;
-  const { itemName, itemDesc, itemQuantity } = req.body;
+  const {
+    itemName,
+    itemDesc,
+    itemQuantity,
+    itemPrice,
+    itemWidth,
+    itemHeight,
+    itemLength,
+    itemMaterial,
+    itemFinish,
+    itemProductionDays,
+  } = req.body;
 
   try {
     const product = await ImageModel.findById(id);
@@ -201,6 +218,13 @@ app.put("/api/db/products/:id", async (req, res) => {
     product.itemName = itemName;
     product.itemDesc = itemDesc;
     product.itemQuantity = itemQuantity;
+    product.itemPrice = itemPrice;
+    product.itemWidth = itemWidth;
+    product.itemHeight = itemHeight;
+    product.itemLength = itemLength;
+    product.itemMaterial = itemMaterial;
+    product.itemFinish = itemFinish;
+    product.itemProductionDays = itemProductionDays;
 
     const updatedProduct = await product.save();
     res.status(200).send(updatedProduct);
