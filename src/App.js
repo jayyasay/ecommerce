@@ -1,16 +1,17 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Login from "./components/Login";
-import FormProducts from "./components/FormProducts";
 import jwt_decode from "jwt-decode";
 import Navigation from "./components/Navigation";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ItemList from "./pages/ItemList";
 import Register from "./components/Register";
 import EditItem from "./pages/EditItem";
+import Catalogue from "./pages/Catalogue"
 import { ConfigProvider } from "antd";
 
 function App() {
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
@@ -32,6 +33,9 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
+          borderRadius: 2,
+          colorPrimary: "#664229",
+          colorError: "#8B0000",
           fontFamily: "Montserrat",
         },
       }}
@@ -49,6 +53,7 @@ function App() {
             path="/edit/:id"
             element={!isLoggedIn ? <Login /> : <EditItem />}
           />
+          <Route path="/catalogue" element={<Catalogue />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>

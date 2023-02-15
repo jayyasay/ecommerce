@@ -13,6 +13,27 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    itemPrice: {
+        type: Number,
+    },
+    itemWidth: {
+        type: Number,
+    },
+    itemHeight: {
+        type: Number,
+    },
+    itemLength: {
+        type: Number,
+    },
+    itemMaterial: {
+        type: String,
+    },
+    itemFinish: {
+        type: String,
+    },
+    itemProductionDays: {
+        type: Number,
+    },
     itemImage: {
         data: Buffer,
         contentType: String
