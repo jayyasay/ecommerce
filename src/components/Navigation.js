@@ -86,7 +86,8 @@ const Navigation = ({ username }) => {
     await axios
       .get(`http://localhost:3001/api/db/products/${option.id}`)
       .then((res) => {
-        navigate(`/edit/${res.data._id}`);
+        navigate(`/product/${res.data._id}`);
+        window.location.reload();
       });
   };
 

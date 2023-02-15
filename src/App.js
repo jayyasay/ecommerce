@@ -8,6 +8,7 @@ import ItemList from "./pages/ItemList";
 import Register from "./components/Register";
 import EditItem from "./pages/EditItem";
 import Catalogue from "./pages/Catalogue"
+import ProductPage from "./pages/ProductPage"
 import { ConfigProvider } from "antd";
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
             element={!isLoggedIn ? <Login /> : <EditItem />}
           />
           <Route path="/catalogue" element={<Catalogue />} />
+          <Route path="/product/:id" element={<ProductPage />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>

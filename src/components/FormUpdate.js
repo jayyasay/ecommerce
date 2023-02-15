@@ -103,7 +103,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}
@@ -116,7 +116,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}
@@ -129,7 +129,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}
@@ -142,7 +142,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}
@@ -162,7 +162,7 @@ function FormUpdate({ handleRefresh }) {
                   rules={[
                     {
                       required: true,
-                      message: "Please input your username!",
+                      message: "Field is required",
                     },
                   ]}
                   onChange={handleChange}
@@ -175,7 +175,7 @@ function FormUpdate({ handleRefresh }) {
                   rules={[
                     {
                       required: true,
-                      message: "Please input your username!",
+                      message: "Field is required",
                     },
                   ]}
                   onChange={handleChange}
@@ -188,7 +188,7 @@ function FormUpdate({ handleRefresh }) {
                   rules={[
                     {
                       required: true,
-                      message: "Please input your username!",
+                      message: "Field is required",
                     },
                   ]}
                   onChange={handleChange}
@@ -202,7 +202,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}
@@ -215,7 +215,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}
@@ -228,7 +228,7 @@ function FormUpdate({ handleRefresh }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Field is required",
                   },
                 ]}
                 onChange={handleChange}

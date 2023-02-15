@@ -104,6 +104,7 @@ app.post("/api/db/products", upload.single("itemImage"), (req, res, next) => {
     itemName: req.body.itemName,
     itemDesc: req.body.itemDesc,
     itemQuantity: req.body.itemQuantity,
+    itemPrice: req.body.itemPrice,
     itemWidth: req.body.itemWidth,
     itemHeight: req.body.itemHeight,
     itemLength: req.body.itemLength,
@@ -259,6 +260,14 @@ app.get("/api/db/products/:id", (req, res) => {
 app.get("/api/db/products", (req, res) => {
   ImageModel.find().then((details) => {
     res.json(details);
+  });
+});
+
+app.get("/api/db/products/:id", (req, res) => {
+  const { id } = req.params;
+  ImageModel.findOne({ _id: id }, (err, product) => {
+    if (err) return res.status(404).send("Product not found!");
+    res.json(product);
   });
 });
 
