@@ -1,8 +1,10 @@
 import { Layout, Menu } from "antd";
 import axios from "axios";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AutoComplete, Input } from "antd";
+import { AutoComplete, Input, Badge } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import { CartContext } from "../CartContext";
 
 const handleLogout = () => {
   localStorage.removeItem("token");
@@ -16,11 +18,14 @@ const Navigation = ({ username }) => {
 
   const [options, setOptions] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const { cartItems, setCartItems } = useContext(CartContext);
+
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const navStyle = useMemo(
     () => ({
       header: {
-        backgroundColor: "#C4A484"
+        backgroundColor: "#C4A484",
       },
     }),
     []
@@ -100,7 +105,7 @@ const Navigation = ({ username }) => {
             top: 0,
             zIndex: 1,
             width: "100%",
-            ...navStyle.header
+            ...navStyle.header,
           }}
         >
           <div
@@ -158,7 +163,7 @@ const Navigation = ({ username }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              ...navStyle.header
+              ...navStyle.header,
             }}
             items={[
               {
@@ -168,6 +173,17 @@ const Navigation = ({ username }) => {
               {
                 label: <Link to="/catalogue">Catalogue</Link>,
                 key: "3",
+              },
+              {
+                label: (
+                  <Link to="/cart">
+                    <div style={{ color: "#fff", marginRight: "20px" }}>
+                      <ShoppingCartOutlined style={{ fontSize: "24px" }} />
+                      <Badge count={cartCount === 0 ? "" : cartCount} />
+                    </div>
+                  </Link>
+                ),
+                key: "4",
               },
             ]}
           />
