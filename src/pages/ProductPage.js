@@ -12,7 +12,7 @@ import {
   Space,
   Table,
   Tag,
-  Skeleton
+  Skeleton,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "../components/Breadcrumb";
@@ -81,9 +81,25 @@ function ProductPage() {
       quantity: selectedQuantity,
       price: fetchProduct.itemPrice,
     };
-    setCartItems([...cartItems, item])
-    console.log(cartItems);
-  }
+  
+    const existingItemIndex = cartItems.findIndex(
+      (cartItem) => cartItem.id === item.id
+    );
+  
+    if (existingItemIndex > -1) {
+      const newCartItems = cartItems.map((cartItem) =>
+        cartItem.id === item.id
+          ? {
+              ...cartItem,
+              quantity: cartItem.quantity + selectedQuantity,
+            }
+          : cartItem
+      );
+      setCartItems(newCartItems);
+    } else {
+      setCartItems([...cartItems, item]);
+    }
+  };
 
   useEffect(() => {
     if (fetchProduct.itemQuantity) {
@@ -99,11 +115,11 @@ function ProductPage() {
   return (
     <>
       <Row style={{ maxWidth: "1200px", margin: "auto" }}>
-        <Row gutter={[0, 40]} style={{marginTop: 20, marginBottom: 20}}>
+        <Row gutter={[0, 40]} style={{ marginTop: 20, marginBottom: 20 }}>
           <BreadCrumb itemName={fetchProduct.itemName} />
         </Row>
 
-        <Row gutter={[40, 8]}  justify="center">
+        <Row gutter={[40, 8]} justify="center">
           <Col span={10}>
             {fetchProduct.itemImage && (
               <TransformWrapper>
@@ -136,7 +152,7 @@ function ProductPage() {
                 style={{
                   width: 120,
                 }}
-                onChange={value => setSelectedQuantity(value)}
+                onChange={(value) => setSelectedQuantity(value)}
                 options={quantityOptions}
               />
 
