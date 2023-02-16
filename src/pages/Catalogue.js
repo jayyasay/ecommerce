@@ -30,7 +30,7 @@ function Catalogue() {
           exquisite attention to detail and a timeless aesthetic.
         </Title>
         {fetchProducts.map((product) => (
-          <Col span={8} flex style={{ gap: 0 }}>
+          <Col span={8} flex style={{ gap: 0 }} key={product.itemName}>
             <Link to={`/product/${product._id}`}>
             <Card
               extra={`${product.itemQuantity} ${product.itemQuantity === 1 ? 'item' : 'items'} left`}

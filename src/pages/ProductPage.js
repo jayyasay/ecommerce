@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import BreadCrumb from "../components/Breadcrumb";
 import { Buffer } from "buffer";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { CartContext } from "../CartContext";
 
 function ProductPage() {
   const { id } = useParams();
@@ -28,6 +29,8 @@ function ProductPage() {
 
   const [fetchProduct, setFetchProduct] = useState([]);
   const [quantityOptions, setQuantityOptions] = useState([]);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   const productList = () => {
     axios.get(`http://localhost:3001/api/db/products/${id}`).then((res) => {
@@ -70,6 +73,17 @@ function ProductPage() {
       length: fetchProduct.itemLength + '"',
     },
   ];
+
+  const handleAddToCart = () => {
+    const item = {
+      id: fetchProduct._id,
+      name: fetchProduct.itemName,
+      quantity: selectedQuantity,
+      price: fetchProduct.itemPrice,
+    };
+    setCartItems([...cartItems, item])
+    console.log(cartItems);
+  }
 
   useEffect(() => {
     if (fetchProduct.itemQuantity) {
@@ -122,11 +136,11 @@ function ProductPage() {
                 style={{
                   width: 120,
                 }}
-                // onChange={handleChange}
+                onChange={value => setSelectedQuantity(value)}
                 options={quantityOptions}
               />
 
-              <Button type="primary" size="small">
+              <Button type="primary" size="small" onClick={handleAddToCart}>
                 Add to cart
               </Button>
             </Space>

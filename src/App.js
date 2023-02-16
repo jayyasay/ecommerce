@@ -9,7 +9,9 @@ import Register from "./components/Register";
 import EditItem from "./pages/EditItem";
 import Catalogue from "./pages/Catalogue"
 import ProductPage from "./pages/ProductPage"
+import Cart from "./pages/Cart";
 import { ConfigProvider } from "antd";
+import { CartProvider } from "./CartContext"
 
 function App() {
 
@@ -42,6 +44,7 @@ function App() {
       }}
     >
       <BrowserRouter>
+        <CartProvider>
         <Navigation username={username} />
         <Routes>
           <Route path="/" element={!isLoggedIn ? <Login /> : <ItemList />} />
@@ -56,7 +59,9 @@ function App() {
           />
           <Route path="/catalogue" element={<Catalogue />} />
           <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
+        </CartProvider>
       </BrowserRouter>
     </ConfigProvider>
   );
