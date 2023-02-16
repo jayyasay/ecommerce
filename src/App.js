@@ -7,14 +7,13 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ItemList from "./pages/ItemList";
 import Register from "./components/Register";
 import EditItem from "./pages/EditItem";
-import Catalogue from "./pages/Catalogue"
-import ProductPage from "./pages/ProductPage"
+import Catalogue from "./pages/Catalogue";
+import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
 import { ConfigProvider } from "antd";
-import { CartProvider } from "./CartContext"
+import { CartProvider } from "./CartContext";
 
 function App() {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
@@ -33,37 +32,42 @@ function App() {
   }, []);
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          borderRadius: 2,
-          colorPrimary: "#664229",
-          colorError: "#8B0000",
-          fontFamily: "Montserrat",
-        },
-      }}
-    >
-      <BrowserRouter>
-        <CartProvider>
-        <Navigation username={username} />
-        <Routes>
-          <Route path="/" element={!isLoggedIn ? <Login /> : <ItemList />} />
-          <Route
-            path="/item-list"
-            element={!isLoggedIn ? <Login /> : <ItemList />}
-          />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/edit/:id"
-            element={!isLoggedIn ? <Login /> : <EditItem />}
-          />
-          <Route path="/catalogue" element={<Catalogue />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/cart" element={<Cart />} />
-        </Routes>
-        </CartProvider>
-      </BrowserRouter>
-    </ConfigProvider>
+    <>
+      <ConfigProvider
+        theme={{
+          token: {
+            borderRadius: 2,
+            colorPrimary: "#664229",
+            colorError: "#8B0000",
+            fontFamily: "Montserrat",
+          },
+        }}
+      >
+        <BrowserRouter>
+          <CartProvider>
+            <Navigation username={username} />
+            <Routes>
+              <Route
+                path="/"
+                element={!isLoggedIn ? <Login /> : <ItemList />}
+              />
+              <Route
+                path="/item-list"
+                element={!isLoggedIn ? <Login /> : <ItemList />}
+              />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/edit/:id"
+                element={!isLoggedIn ? <Login /> : <EditItem />}
+              />
+              <Route path="/catalogue" element={<Catalogue />} />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+          </CartProvider>
+        </BrowserRouter>
+      </ConfigProvider>
+    </>
   );
 }
 
