@@ -13,6 +13,7 @@ import {
   Table,
   Tag,
   Skeleton,
+  Spin,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "../components/Breadcrumb";
@@ -30,6 +31,7 @@ function ProductPage() {
   const [fetchProduct, setFetchProduct] = useState([]);
   const [quantityOptions, setQuantityOptions] = useState([]);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [spin, setSpin] = useState(false);
   const { cartItems, setCartItems } = useContext(CartContext);
 
   const productList = () => {
@@ -75,31 +77,68 @@ function ProductPage() {
   ];
 
   const handleAddToCart = () => {
-    const item = {
-      id: fetchProduct._id,
-      name: fetchProduct.itemName,
-      quantity: selectedQuantity,
-      price: fetchProduct.itemPrice,
-    };
-  
-    const existingItemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.id === item.id
-    );
-  
-    if (existingItemIndex > -1) {
-      const newCartItems = cartItems.map((cartItem) =>
-        cartItem.id === item.id
-          ? {
-              ...cartItem,
-              quantity: cartItem.quantity + selectedQuantity,
-            }
-          : cartItem
+    setSpin(true);
+    setTimeout(() => {
+      setSpin(false);
+      const item = {
+        id: fetchProduct._id,
+        name: fetchProduct.itemName,
+        quantity: selectedQuantity,
+        price: fetchProduct.itemPrice,
+      };
+
+      const existingItemIndex = cartItems.findIndex(
+        (cartItem) => cartItem.id === item.id
       );
-      setCartItems(newCartItems);
-    } else {
-      setCartItems([...cartItems, item]);
-    }
+
+      const existingItemQuantity = cartItems.map(
+        (existingItem) => item.quantity + existingItem.quantity
+      );
+
+      if (existingItemIndex > -1) {
+        const newCartItems = cartItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + selectedQuantity,
+              }
+            : cartItem
+        );
+        const newCartItemsQuantity = cartItems.map(
+          (cartItemQuantity) => cartItemQuantity.quantity + selectedQuantity
+        );
+        setCartItems(newCartItems);
+        const options = [];
+        for (
+          let i = 1;
+          i <= fetchProduct.itemQuantity - newCartItemsQuantity;
+          i++
+        ) {
+          options.push({ value: i, label: `${i}` });
+        }
+        setQuantityOptions(options);
+        setSelectedQuantity(
+          parseInt(existingItemQuantity) === fetchProduct.itemQuantity
+            ? "Out of stock"
+            : 1
+        );
+      } else {
+        setCartItems([...cartItems, item]);
+        const options = [];
+        for (let i = 1; i <= fetchProduct.itemQuantity - item.quantity; i++) {
+          options.push({ value: i, label: `${i}` });
+        }
+        setQuantityOptions(options);
+        setSelectedQuantity(
+          item.quantity === fetchProduct.itemQuantity ? "Out of stock" : 1
+        );
+      }
+    }, 500);
   };
+
+  useEffect(() => {
+    productList();
+  }, []);
 
   useEffect(() => {
     if (fetchProduct.itemQuantity) {
@@ -109,7 +148,6 @@ function ProductPage() {
       }
       setQuantityOptions(options);
     }
-    productList();
   }, [fetchProduct.itemQuantity]);
 
   return (
@@ -146,20 +184,21 @@ function ProductPage() {
             </Title>
             <Divider />
             <Title level={3}>Quantity</Title>
-            <Space direction="vertical" size="middle">
-              <Select
-                defaultValue={1}
-                style={{
-                  width: 120,
-                }}
-                onChange={(value) => setSelectedQuantity(value)}
-                options={quantityOptions}
-              />
-
-              <Button type="primary" size="small" onClick={handleAddToCart}>
-                Add to cart
-              </Button>
-            </Space>
+            <Spin tip="Loading..." spinning={spin}>
+              <Space direction="vertical" size="middle">
+                <Select
+                  value={selectedQuantity}
+                  style={{
+                    width: 120,
+                  }}
+                  onChange={(value) => setSelectedQuantity(value)}
+                  options={quantityOptions}
+                />
+                <Button type="primary" size="small" onClick={handleAddToCart}>
+                  Add to cart
+                </Button>
+              </Space>
+            </Spin>
             <Divider />
             <Title level={3}>Description</Title>
             <Text>{fetchProduct.itemDesc}</Text>
