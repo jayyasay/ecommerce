@@ -234,7 +234,7 @@ function ProductPage() {
                   marginLeft: 5,
                 }}
               >
-                tax included
+                tax include
               </small>
             </Title>
             <Divider />
