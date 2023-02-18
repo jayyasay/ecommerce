@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { CartContext } from "../CartContext";
 import { Table, Row, Col, Button, Popconfirm, Typography } from "antd";
+import { Link } from "react-router-dom";
 
 function Cart() {
   const { Title } = Typography;
@@ -16,10 +17,11 @@ function Cart() {
 
   const data = [];
   cartItems.map((item) => {
-    console.log(item.id);
     return data.push({
       key: item.id,
-      name: item.name,
+      name: (
+        <Link to={`http://localhost:5000/product/${item.id}`}>{item.name}</Link>
+      ),
       quantity: item.quantity,
       price: "₱ " + item.price,
     });
@@ -74,9 +76,10 @@ function Cart() {
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
-  const totalPrice = data.reduce((total, item) => total + item.quantity * parseInt(item.price.substring(2)), 0)
-
-  console.log(totalPrice);
+  const totalPrice = data.reduce(
+    (total, item) => total + item.quantity * parseInt(item.price.substring(2)),
+    0
+  );
 
   return (
     <>
@@ -91,17 +94,23 @@ function Cart() {
         <Col span={24}>
           <Row>
             <Col span={24}>
-              <Title>Your cart...</Title>
+              <Title> Your cart... </Title>
               <Table pagination={false} columns={columns} dataSource={data} />
             </Col>
           </Row>
-
           <Row justify="end">
             <Col span={18}>
-              <Title level={2} style={{textAlign: "right"}}>Total</Title>
+              <Title
+                level={2}
+                style={{
+                  textAlign: "right",
+                }}
+              >
+                Total
+              </Title>
             </Col>
             <Col span={3} offset={1}>
-              <Title level={2}>₱ {totalPrice}</Title>
+              <Title level={2}> ₱{totalPrice} </Title>
             </Col>
           </Row>
         </Col>
