@@ -113,6 +113,15 @@ function Cart() {
               <Title level={2}> ₱{totalPrice} </Title>
             </Col>
           </Row>
+          <Row justify="center" style={{ textAlign: "center" }}>
+            <Col span={24}>
+              {data.length !== 0 && (
+                <Button type="primary" href="/checkout">
+                  Proceed to checkout
+                </Button>
+              )}
+            </Col>
+          </Row>
         </Col>
       </Row>
     </>

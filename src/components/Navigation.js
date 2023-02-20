@@ -43,7 +43,7 @@ const Navigation = ({ username }) => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-      if (token) {
+      if (token && username) {
         try {
           const result = await axios.get(
             `http://localhost:3001/api/db/registrations/${username}`,

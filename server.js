@@ -16,9 +16,25 @@ const mongoose = require("mongoose");
 const ImageModel = require("./image.model");
 const RegistrationModel = require("./registration.model");
 
-mongoose.connect("mongodb://localhost:27017/db", {
-  useNewUrlParser: true,
-});
+// mongodb://localhost:27017/db
+
+// mongoose.connect(
+//   "mongodb+srv://jayyasay:BoyBoy0322@cluster0.qjies0v.mongodb.net/db",
+//   {
+//     useNewUrlParser: true,
+//   }
+// );
+
+mongoose
+  .connect(
+    "mongodb+srv://jayyasay:BoyBoy0322@cluster0.qjies0v.mongodb.net/db",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((error) => console.error(error));
 
 const Storage = multer.diskStorage({
   destination: (req, file, cb) => {
