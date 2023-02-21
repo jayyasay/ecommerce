@@ -10,6 +10,7 @@ import EditItem from "./pages/EditItem";
 import Catalogue from "./pages/Catalogue";
 import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import { ConfigProvider } from "antd";
 import { CartProvider } from "./CartContext";
 
@@ -63,6 +64,7 @@ function App() {
               <Route path="/catalogue" element={<Catalogue />} />
               <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Routes>
           </CartProvider>
         </BrowserRouter>

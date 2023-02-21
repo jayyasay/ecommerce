@@ -145,7 +145,6 @@ function ProductPage() {
             ? true
             : false
         );
-        console.log(existingItemQuantity);
       } else {
         setCartItems([...cartItems, item]);
         const options = [];
@@ -164,7 +163,6 @@ function ProductPage() {
         setTooltipVisible(
           item.quantity === fetchProduct.itemQuantity ? true : false
         );
-        console.log("Not Existing!");
       }
     }, 500);
   };
@@ -177,7 +175,6 @@ function ProductPage() {
     if (fetchProduct.itemQuantity) {
       const quantity = matchingItem ? matchingItem.quantity : 0; // set quantity to 0 if no matching item is found
       const options = [];
-      console.log("Quantity for ID " + fetchProduct._id + ": " + quantity);
       for (let i = 1; i <= fetchProduct.itemQuantity - quantity; i++) {
         options.push({
           value: i,
@@ -234,9 +231,10 @@ function ProductPage() {
               <small
                 style={{
                   fontSize: 12,
+                  marginLeft: 5,
                 }}
               >
-                tax included
+                tax include
               </small>
             </Title>
             <Divider />

@@ -11,14 +11,24 @@ const config = require("config");
 app.use(cors());
 app.use(bodyParser.json());
 
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 
 const ImageModel = require("./image.model");
 const RegistrationModel = require("./registration.model");
 
-mongoose.connect("mongodb://localhost:27017/db", {
-  useNewUrlParser: true,
-});
+// mongodb://localhost:27017/db
+
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
+// mongoose
+//   .connect("mongodb://localhost:27017/db", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => console.log("Connected to MongoDB Atlas"))
+//   .catch((error) => console.error(error));
 
 const Storage = multer.diskStorage({
   destination: (req, file, cb) => {
