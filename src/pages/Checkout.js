@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import { CartContext } from "../CartContext";
-import { Table, Row, Col, Button, Popconfirm, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 function Checkout() {
