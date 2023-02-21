@@ -81,9 +81,9 @@ function ProductPage() {
 
   const dataLocalStorage = localStorage.getItem("cartItems");
   const dataLocalStorageParsed = JSON.parse(dataLocalStorage);
-  const matchingItem = dataLocalStorageParsed.find(
-    (item) => item.id === fetchProduct._id
-  );
+  const matchingItem =
+    dataLocalStorage &&
+    dataLocalStorageParsed.find((item) => item.id === fetchProduct._id);
 
   const handleAddToCart = () => {
     setSpin(true);

@@ -18,17 +18,9 @@ const mongoose = require("mongoose");
 const ImageModel = require("./image.model");
 const RegistrationModel = require("./registration.model");
 
-// mongodb://localhost:27017/db
-
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
-
-// mongoose
-//   .connect("mongodb://localhost:27017/db", {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => console.log("Connected to MongoDB Atlas"))
-//   .catch((error) => console.error(error));
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+});
 
 const Storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -223,7 +215,9 @@ app.put("/api/db/products/:id", async (req, res) => {
   try {
     const product = await ImageModel.findById(id);
     if (!product) {
-      return res.status(404).send({ error: "Product not found" });
+      return res.status(404).send({
+        error: "Product not found",
+      });
     }
 
     product.itemName = itemName;
@@ -261,10 +255,15 @@ app.get("/api/db/registrations/:id", (req, res) => {
 
 app.get("/api/db/products/:id", (req, res) => {
   const { id } = req.params;
-  ImageModel.findOne({ _id: id }, (err, product) => {
-    if (err) return res.status(404).send("Product not found!");
-    res.json(product);
-  });
+  ImageModel.findOne(
+    {
+      _id: id,
+    },
+    (err, product) => {
+      if (err) return res.status(404).send("Product not found!");
+      res.json(product);
+    }
+  );
 });
 
 app.get("/api/db/products", (req, res) => {
@@ -275,10 +274,15 @@ app.get("/api/db/products", (req, res) => {
 
 app.get("/api/db/products/:id", (req, res) => {
   const { id } = req.params;
-  ImageModel.findOne({ _id: id }, (err, product) => {
-    if (err) return res.status(404).send("Product not found!");
-    res.json(product);
-  });
+  ImageModel.findOne(
+    {
+      _id: id,
+    },
+    (err, product) => {
+      if (err) return res.status(404).send("Product not found!");
+      res.json(product);
+    }
+  );
 });
 
 app.listen(3001, () => {
