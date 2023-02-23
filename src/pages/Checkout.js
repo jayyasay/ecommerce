@@ -13,31 +13,43 @@ import {
 import { Link } from "react-router-dom";
 import CustomerDetails from "../components/checkout/CustomerDetails";
 import ConfirmDetails from "../components/checkout/ConfirmDetails";
-
-const steps = [
-  {
-    title: "Delivery details",
-    content: <CustomerDetails />,
-  },
-  {
-    title: "Confirm details",
-    content: <ConfirmDetails />,
-  },
-  {
-    title: "Payment",
-    content: "Content Here",
-  },
-  {
-    title: "Thank you",
-    content: "Content Here",
-  },
-];
+import Payment from "../components/checkout/Payment";
 
 function Checkout() {
   const { Title } = Typography;
 
   const { cartItems, setCartItems } = useContext(CartContext);
   const [current, setCurrent] = useState(0);
+  const [customerDetails, setCustomerDetails] = useState({});
+
+  const updateCustomerDetails = (values) => {
+    setCustomerDetails((prevCustomerDetails) => ({
+      ...prevCustomerDetails,
+      ...values,
+    }));
+    next();
+  };
+
+  const steps = [
+    {
+      title: "Delivery details",
+      content: (
+        <CustomerDetails updateCustomerDetails={updateCustomerDetails} customerDetails={customerDetails}/>
+      ),
+    },
+    {
+      title: "Confirm details",
+      content: <ConfirmDetails customerDetails={customerDetails} />,
+    },
+    {
+      title: "Payment",
+      content: <Payment />,
+    },
+    {
+      title: "Thank you",
+      content: "Content Here",
+    },
+  ];
 
   const next = () => {
     setCurrent(current + 1);
@@ -60,8 +72,8 @@ function Checkout() {
           <Steps current={current} items={items} />
           <div>{steps[current].content}</div>
         </Col>
-        <Col span={24} style={{textAlign: "center"}}>
-          {current < steps.length - 1 && (
+        <Col span={24} style={{ textAlign: "center" }}>
+          {current === 0 ? null : (
             <Button type="primary" onClick={() => next()}>
               Next
             </Button>
