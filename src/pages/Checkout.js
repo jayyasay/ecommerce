@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import CustomerDetails from "../components/checkout/CustomerDetails";
 import ConfirmDetails from "../components/checkout/ConfirmDetails";
 import Payment from "../components/checkout/Payment";
+import Confirmation from "../components/checkout/Confirmation";
 
 function Checkout() {
   const { Title } = Typography;
@@ -30,6 +31,18 @@ function Checkout() {
     next();
   };
 
+  const next = () => {
+    setCurrent(current + 1);
+  };
+
+  const prev = () => {
+    setCurrent(current - 1);
+  };
+
+  const handleNextStep = () => {
+    setCurrent((prevStep) => prevStep + 1);
+  };
+
   const steps = [
     {
       title: "Delivery details",
@@ -43,21 +56,13 @@ function Checkout() {
     },
     {
       title: "Payment",
-      content: <Payment />,
+      content: <Payment onNextStep={handleNextStep} />,
     },
     {
       title: "Thank you",
-      content: "Content Here",
+      content: <Confirmation />,
     },
   ];
-
-  const next = () => {
-    setCurrent(current + 1);
-  };
-
-  const prev = () => {
-    setCurrent(current - 1);
-  };
 
   const items = steps.map((item) => ({
     key: item.title,
