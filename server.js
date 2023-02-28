@@ -197,6 +197,27 @@ app.delete("/api/db/products/:id", (req, res) => {
 //   }
 // );
 
+app.put("/api/db/update-product/:id", async (req, res) => {
+  const { id } = req.params;
+  const { quantity } = req.body;
+
+  try {
+    const product = await ImageModel.findById(id);
+    if (!product) {
+      return res.status(404).send({
+        error: "Product not found",
+      });
+    }
+
+    product.itemQuantity = quantity;
+
+    const updatedProduct = await product.save();
+    res.status(200).send(updatedProduct);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 app.put("/api/db/products/:id", async (req, res) => {
   const { id } = req.params;
   const {
