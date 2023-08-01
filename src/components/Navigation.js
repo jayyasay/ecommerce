@@ -33,7 +33,7 @@ const Navigation = ({ username }) => {
 
   // useEffect(() => {
   //   const fetchData = async () => {
-  //     const result = await axios.get("https://dancing-seahorse-92f9d7.netlify.app/api/db/products");
+  //     const result = await axios.get("http://localhost:3001/api/db/products");
   //     setOptions(result.data.map((item) => ({ value: item.itemName })));
   //   };
   //   fetchData();
@@ -46,7 +46,7 @@ const Navigation = ({ username }) => {
       if (token && username) {
         try {
           const result = await axios.get(
-            `https://dancing-seahorse-92f9d7.netlify.app/api/db/registrations/${username}`,
+            `http://localhost:3001/api/db/registrations/${username}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -68,7 +68,7 @@ const Navigation = ({ username }) => {
     if (value === "") {
       setOptions([]);
     } else {
-      const result = await axios.get(`https://dancing-seahorse-92f9d7.netlify.app/api/db/products`);
+      const result = await axios.get(`http://localhost:3001/api/db/products`);
       const filteredOptions = result.data.filter((item) =>
         item.itemName.toLowerCase().includes(value.toLowerCase())
       );
@@ -89,7 +89,7 @@ const Navigation = ({ username }) => {
 
   const onSelect = async (value, option) => {
     await axios
-      .get(`https://dancing-seahorse-92f9d7.netlify.app/api/db/products/${option.id}`)
+      .get(`http://localhost:3001/api/db/products/${option.id}`)
       .then((res) => {
         navigate(`/product/${res.data._id}`);
         window.location.reload();

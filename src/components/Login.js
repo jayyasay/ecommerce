@@ -37,7 +37,7 @@ function Login() {
     };
 
     axios
-      .post("https://dancing-seahorse-92f9d7.netlify.app/api/db/login", data, {
+      .post("http://localhost:3001/api/db/login", data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer secret",

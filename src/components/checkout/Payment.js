@@ -32,7 +32,7 @@ function Payment({ onNextStep }) {
   useEffect(() => {
     const ids = cartItems.map((item) => item.id);
     axios
-      .get(`https://dancing-seahorse-92f9d7.netlify.app/api/db/products/${ids}`)
+      .get(`http://localhost:3001/api/db/products/${ids}`)
       .then((response) => {
         setCurrentQuantities(response.data.itemQuantity);
       })
@@ -65,7 +65,7 @@ function Payment({ onNextStep }) {
                 const { id, quantity } = item;
                 const finalQuantity = currentQuantities - quantity;
                 axios.put(
-                  `https://dancing-seahorse-92f9d7.netlify.app/api/db/update-product/${id}`,
+                  `http://localhost:3001/api/db/update-product/${id}`,
                   { quantity: finalQuantity },
                   {
                     headers: {
