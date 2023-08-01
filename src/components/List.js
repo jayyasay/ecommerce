@@ -49,7 +49,7 @@ function List({ refresh }) {
 
   const handleOk = useCallback(() => {
     axios
-      .delete(`http://localhost:3001/api/db/products/${productToDelete}`)
+      .delete(`https://dancing-seahorse-92f9d7.netlify.app/api/db/products/${productToDelete}`)
       .then((res) => {
         setShowModal(false);
         const remainingProducts = fetchProducts.filter(
@@ -72,7 +72,7 @@ function List({ refresh }) {
   }, []);
 
   const productList = () => {
-    axios.get("http://localhost:3001/api/db/products").then((res) => {
+    axios.get("https://dancing-seahorse-92f9d7.netlify.app/api/db/products").then((res) => {
       setSpin(true);
       setFetchProducts(res.data);
     });

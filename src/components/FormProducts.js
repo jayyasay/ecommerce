@@ -100,7 +100,7 @@ function FormProducts() {
 
   const handleOk = useCallback(() => {
     axios
-      .delete(`http://localhost:3001/api/db/products/${productToDelete}`)
+      .delete(`https://dancing-seahorse-92f9d7.netlify.app1/api/db/products/${productToDelete}`)
       .then((res) => {
         setShowModal(false);
         productList();
@@ -123,7 +123,7 @@ function FormProducts() {
   // const handleOk = async (id) => {
   //   console.log(id);
   //   axios
-  //     .delete(`http://localhost:3001/api/db/products/${productToDelete}`)
+  //     .delete(`https://dancing-seahorse-92f9d7.netlify.app1/api/db/products/${productToDelete}`)
   //     .then((res) => {
   //       setShowModal(false);
   //       productList();
@@ -133,7 +133,7 @@ function FormProducts() {
   const handleOkEdit = async (id) => {
     console.log(id);
     axios
-      .delete(`http://localhost:3001/api/db/products/${productToDelete}`)
+      .delete(`https://dancing-seahorse-92f9d7.netlify.app1/api/db/products/${productToDelete}`)
       .then((res) => {
         setShowModal(false);
         productList();
@@ -147,7 +147,7 @@ function FormProducts() {
 
   const currentData = async (id) => {
     await axios
-      .get(`http://localhost:3001/api/db/products/${id}`)
+      .get(`https://dancing-seahorse-92f9d7.netlify.app1/api/db/products/${id}`)
       .then((res) => {
         setProductToEdit({
           itemNameEdit: res.data.itemName,
@@ -159,14 +159,14 @@ function FormProducts() {
   };
 
   const productList = async () => {
-    axios.get("http://localhost:3001/api/db/products").then((res) => {
+    axios.get("https://dancing-seahorse-92f9d7.netlify.app1/api/db/products").then((res) => {
       setFetchProducts(res.data);
     });
   };
 
   useEffect(() => {
     const productList = async () => {
-      const res = await axios.get("http://localhost:3001/api/db/products");
+      const res = await axios.get("https://dancing-seahorse-92f9d7.netlify.app1/api/db/products");
       setFetchProducts(res.data);
     };
     productList();
@@ -180,7 +180,7 @@ function FormProducts() {
     data.append("itemImage", formData.itemImage);
 
     axios
-      .post("http://localhost:3001/api/db/products", data)
+      .post("https://dancing-seahorse-92f9d7.netlify.app1/api/db/products", data)
       .then((res) => {
         messageApi.open({
           type: "success",

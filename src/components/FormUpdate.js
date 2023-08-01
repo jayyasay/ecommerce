@@ -60,7 +60,7 @@ function FormUpdate({ handleRefresh }) {
     data.append("itemImage", formData.itemImage);
 
     axios
-      .post("http://localhost:3001/api/db/products", data)
+      .post("https://dancing-seahorse-92f9d7.netlify.app/api/db/products", data)
       .then((res) => {
         messageApi.open({
           type: "success",
