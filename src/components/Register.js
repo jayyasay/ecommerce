@@ -37,7 +37,7 @@ function Register() {
     data.append("email", formData.email);
     data.append("password", formData.password);
     axios
-      .post("https://ecommerce-olive-delta.vercel.app/api/db/registrations", data, {
+      .post("http://localhost:3001/api/db/registrations", data, {
         headers: {
           "Content-Type": "application/json",
         },
