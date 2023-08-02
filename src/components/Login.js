@@ -37,7 +37,7 @@ function Login() {
     };
 
     axios
-      .post("http://localhost:3001/api/db/login", data, {
+      .post("https://ecommerce-olive-delta.vercel.app/api/db/login", data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer secret",
